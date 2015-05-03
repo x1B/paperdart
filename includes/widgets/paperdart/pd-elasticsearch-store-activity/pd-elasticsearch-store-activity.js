@@ -16,7 +16,7 @@ define( [
       var esType = config( 'type', 'paste' );
       var esClient = new es.Client( {
          host:  config( 'host', 'localhost:9200' ),
-         log: config( 'logLevel', 'trace' )
+         log: config( 'logLevel', 'info' )
       } );
 
       context.flags = {};
@@ -87,7 +87,7 @@ define( [
                if( error.message.indexOf( 'IndexMissingException' ) === 0 ) {
                   return tryCreateIndex().then(
                      function() { return fetchPaste( id ); },
-                     function( error ) { reportError( 'Could not create index', 'index.create', error ) }
+                     function( error ) { reportError( 'Could not create index', 'index.create', error ); }
                   );
                }
                if( error.message.indexOf( 'Not Found' ) === 0 ) {
@@ -109,7 +109,6 @@ define( [
       function store( event ) {
          eventBus.publish( 'willTakeAction.' + event.action, { action: event.action } );
          var paste = context.resources.paste;
-         console.log( 'putting paste: ', paste );
          esClient.index( {
             index: esIndex,
             type: esType,

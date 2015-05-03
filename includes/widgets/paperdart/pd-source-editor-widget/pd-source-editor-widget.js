@@ -6,9 +6,10 @@ define( [
    'angular',
    'laxar',
    'laxar_patterns',
+   'toastr',
    'angular-bootstrap',
    'angular-ui-codemirror'
-], function( ng, ax, patterns ) {
+], function( ng, ax, patterns, toastr ) {
    'use strict';
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +102,15 @@ define( [
          var saveAction = $scope.features.save.action;
          eventBus.publishAndGatherReplies( 'takeActionRequest.' + saveAction, {
             action: saveAction
-         } ).then( function() {
+         } ).then( function( responses ) {
+            console.log( 'resp', responses );
+            var failed = responses.some( function( _ ) { return _.event.outcome === 'ERROR' } );
+            if( failed ) {
+               toastr.error( 'Save failed!' );
+            }
+            else {
+               toastr.info( 'Paste saved' );
+            }
             $scope.view.busy = false;
          } );
       }

@@ -49,12 +49,14 @@ var require = {
             'codemirror/mode/javascript/javascript',
             'codemirror/mode/markdown/markdown',
             'codemirror/mode/htmlmixed/htmlmixed',
-            'codemirror/mode/css/css' ],
+            'codemirror/mode/css/css'
+         ],
          init: function( angular, codemirror ) {
             window.CodeMirror = codemirror;
             return angular.module( 'ui.codemirror' );
          }
       },
+      'toastr': [ 'jquery' ],
       'bootstrap-affix': {
          deps: [ 'jquery' ]
       },
@@ -133,7 +135,8 @@ var require = {
 
       // Widgets:
       'angular-bootstrap': 'angular-bootstrap/ui-bootstrap',
-      'angular-ui-codemirror': 'angular-ui-codemirror/ui-codemirror'
+      'angular-ui-codemirror': 'angular-ui-codemirror/ui-codemirror',
+      'toastr': 'toastr/toastr'
 
    }
 };
