@@ -18,7 +18,18 @@
             "required": [ "resource" ],
             "properties": {
                "resource": {
-                  "type": "string"
+                  "type": "string",
+                  "format": "topic"
+               }
+            }
+         },
+
+         "save": {
+            "type": "object",
+            "properties": {
+               "action": {
+                  "type": "string",
+                  "format": "topic"
                }
             }
          }

@@ -7,38 +7,87 @@
             "widget": "paperdart/pd-elasticsearch-store-activity",
             "features": {
                "paste": {
-                  "resource": "paste"
+                  "resource": "paste",
+                  "parameter": "paste"
                },
                "save": {
                   "onActions": [ "save" ]
+               },
+               "flags": [
+                  { "mimeType": null, "flag": "missingPaste" },
+                  { "mimeType": "text/x-markdown", "flag": "isMarkdown" }
+               ]
+            }
+         }
+      ],
+
+      "contentMain": [
+         {
+            "widget": "laxarjs/ax-messages-widget"
+         },
+         {
+            "widget": "laxarjs/ax-show-hide-widget",
+            "id": "editorShowHide",
+            "features": {
+               "animation": {
+                  "enabled": false
+               },
+               "visibility": {
+                  "toggleOn": "!missingPaste"
                }
             }
          }
       ],
 
-      "content": [
+      "contentPreview": [
+         {
+            "widget": "laxarjs/ax-show-hide-widget",
+            "id": "previewShowHide",
+            "features": {
+               "visibility": {
+                  "toggleOn": "isMarkdown"
+               }
+            }
+         }
+      ],
+
+      "editorShowHide.content": [
          {
             "widget": "paperdart/pd-source-editor-widget",
             "features": {
                "source": {
                   "resource": "paste"
+               },
+               "save": {
+                  "action": "save"
+               }
+            }
+         }
+      ],
+
+      "previewShowHide.content": [
+         {
+            "widget": "laxarjs/ax-headline-widget",
+            "features": {
+               "headline": {
+                  "i18nHtmlText": "Markdown Preview",
+                  "level": 2
+               }
+            }
+         },
+         {
+            "widget": "laxarjs/ax-markdown-display-widget",
+            "features": {
+               "markdown": {
+                  "resource": "paste",
+                  "attribute": "text",
+                  "parameter": "md-section"
                }
             }
          }
       ],
 
       "footer": [
-         {
-            "widget": "laxarjs/ax-command-bar-widget",
-            "features": {
-               "buttons": [
-                  {
-                     "i18nHtmlLabel": "Save",
-                     "action": "save"
-                  }
-               ]
-            }
-         },
          {
             "widget": "laxarjs/ax-developer-tools-widget"
          }

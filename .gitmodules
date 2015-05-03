@@ -7,3 +7,12 @@
 [submodule "includes/widgets/laxarjs/ax-developer-tools-widget"]
 	path = includes/widgets/laxarjs/ax-developer-tools-widget
 	url = git@github.com:laxarjs/ax-developer-tools-widget.git
+[submodule "includes/widgets/laxarjs/ax-messages-widget"]
+	path = includes/widgets/laxarjs/ax-messages-widget
+	url = git@github.com:laxarjs/ax-messages-widget.git
+[submodule "includes/widgets/laxarjs/ax-show-hide-widget"]
+	path = includes/widgets/laxarjs/ax-show-hide-widget
+	url = git@github.com:laxarjs/ax-show-hide-widget.git
+[submodule "includes/widgets/laxarjs/ax-headline-widget"]
+	path = includes/widgets/laxarjs/ax-headline-widget
+	url = git@github.com:laxarjs/ax-headline-widget.git

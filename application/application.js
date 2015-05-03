@@ -17,7 +17,15 @@ window.laxar = ( function() {
       },
       useEmbeddedFileListings: mode === 'RELEASE',
       useMergedCss: mode === 'RELEASE',
-      eventBusTimeoutMs: (mode === 'RELEASE' ? 120 : 10) * 1000
+      eventBusTimeoutMs: (mode === 'RELEASE' ? 120 : 10) * 1000,
+
+      widgets: {
+         paperdart: {
+            elasticsearch: {
+               host: 'localhost:9200'
+            }
+         }
+      }
    };
 
 } )();

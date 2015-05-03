@@ -3,7 +3,7 @@
    "description": "Reads and stores pastes to/from elasticsearch",
 
    "integration": {
-      "technology": "angular",
+      "technology": "plain",
       "type": "activity"
    },
 
@@ -18,9 +18,14 @@
             "required": [ "resource" ],
             "properties": {
                "resource": {
+                  "type": "string",
+                  "format": "topic"
+               },
+               "parameter": {
                   "type": "string"
                }
             }
+
          },
 
          "save": {
@@ -30,6 +35,25 @@
                   "type": "array",
                   "default": [],
                   "items": {
+                     "type": "string",
+                     "format": "topic"
+                  }
+               }
+            }
+         },
+
+         "flags": {
+            "description": "Flags to set/clear depending on the (absence of a) paste mime-type.",
+            "type": "array",
+            "default": [],
+            "items": {
+               "type": "object",
+               "required": [ "mimeType", "flag" ],
+               "properties": {
+                  "mimeType": {
+                     "type": [ "string", "null" ]
+                  },
+                  "flag": {
                      "type": "string",
                      "format": "topic"
                   }

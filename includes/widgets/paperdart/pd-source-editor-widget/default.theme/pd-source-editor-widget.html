@@ -1,34 +1,41 @@
-<div class="panel panel-default">
-  <div class="panel-heading">Paste Content</div>
+<div class="panel panel-default" ng-if="model.source">
+  <div class="panel-heading" ng-if="!model.source.id">Create a new paste</div>
+  <div class="panel-heading" ng-if="model.source.id">Paste <a ng-href="model.view.link">{{ model.source.id }}</a></div>
   <div class="panel-body">
 
     <form>
       <div class="form-group">
-        <label ax-for="'text'">Source Text</label>
-        <textarea class="form-control pd-source-editor-code"
-                  ng-model="model.source.text"></textarea>
+        <label ax-for="'source-text'">Source Text</label>
+        <textarea ax-id="'source-text'"
+                  class="form-control"
+                  ng-model="model.source.text"
+                  rows="12"></textarea>
       </div>
 
-      <label ax-for="'mimeType'">Content Type</label>
-      <div ax-id="'mimeType'"
-           class="btn-group"
-           dropdown>
+      <div class="form-group pull-right">
+        <div class="btn-group" dropdown>
+          <button type="button"
+                  class="btn btn-default pd-source-editor-mime">{{ view.typeLabels[ model.source.mimeType ] }}
+          </button>
+          <button type="button"
+                  class="btn btn-default dropdown-toggle"
+                  dropdown-toggle
+                  aria-expanded="{{ view.showMimeTypes }}">
+            <span class="caret"></span>
+            <span class="sr-only">Select Content Type</span>
+          </button>
+          <ul class="dropdown-menu"
+              role="menu">
+            <li ng-repeat="type in model.mimeTypes">
+              <a ng-click="commands.selectMimeType( type )" href="#">{{ type.label }}</a>
+            </li>
+          </ul>
+        </div>
+
         <button type="button"
-                class="btn btn-info">{{ view.typeLabels[ model.source.mimeType ] }}
+                class="btn btn-primary"
+                ng-click="commands.save()"><i class='fa fa-paper-plane'></i> Save
         </button>
-        <button type="button"
-                class="btn btn-info dropdown-toggle"
-                dropdown-toggle
-                aria-expanded="{{ view.showMimeTypes }}">
-          <span class="caret"></span>
-          <span class="sr-only">Select Content Type</span>
-        </button>
-        <ul class="dropdown-menu"
-            role="menu">
-          <li ng-repeat="type in model.mimeTypes">
-            <a ng-click="commands.selectMimeType( type )" href="#">{{ type.label }}</a>
-          </li>
-        </ul>
       </div>
 
     </form>

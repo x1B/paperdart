@@ -1,10 +1,14 @@
 {
    "places": {
       "entry": {
-         "redirectTo": "pasteboard"
+         "redirectTo": "paste"
       },
 
-      "pasteboard": {
+      "paste/:paste": {
+         "page":  "pasteboard"
+      },
+
+      "paste": {
          "page":  "pasteboard"
       }
    }
