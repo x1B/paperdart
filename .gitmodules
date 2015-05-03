@@ -16,3 +16,6 @@
 [submodule "includes/widgets/laxarjs/ax-headline-widget"]
 	path = includes/widgets/laxarjs/ax-headline-widget
 	url = git@github.com:laxarjs/ax-headline-widget.git
+[submodule "includes/widgets/laxarjs/ax-html-display-widget"]
+	path = includes/widgets/laxarjs/ax-html-display-widget
+	url = git@github.com:laxarjs/ax-html-display-widget.git

@@ -15,7 +15,8 @@
                },
                "flags": [
                   { "mimeType": null, "flag": "missingPaste" },
-                  { "mimeType": "text/x-markdown", "flag": "isMarkdown" }
+                  { "mimeType": "text/x-markdown", "flag": "isMarkdown" },
+                  { "mimeType": "text/html", "flag": "isHtml" }
                ]
             }
          }
@@ -42,13 +43,25 @@
       "contentPreview": [
          {
             "widget": "laxarjs/ax-show-hide-widget",
-            "id": "previewShowHide",
+            "id": "markdownPreviewShowHide",
             "features": {
                "animation": {
                   "enabled": false
                },
                "visibility": {
                   "toggleOn": "isMarkdown"
+               }
+            }
+         },
+         {
+            "widget": "laxarjs/ax-show-hide-widget",
+            "id": "htmlPreviewShowHide",
+            "features": {
+               "animation": {
+                  "enabled": false
+               },
+               "visibility": {
+                  "toggleOn": "isHtml"
                }
             }
          }
@@ -68,12 +81,12 @@
          }
       ],
 
-      "previewShowHide.content": [
+      "markdownPreviewShowHide.content": [
          {
             "widget": "laxarjs/ax-headline-widget",
             "features": {
                "headline": {
-                  "i18nHtmlText": "Markdown Preview",
+                  "i18nHtmlText": "<em>Preview</em>",
                   "level": 4
                }
             }
@@ -86,6 +99,27 @@
                   "attribute": "text",
                   "parameter": "md-section",
                   "url": "README.md"
+               }
+            }
+         }
+      ],
+
+      "htmlPreviewShowHide.content": [
+         {
+            "widget": "laxarjs/ax-headline-widget",
+            "features": {
+               "headline": {
+                  "i18nHtmlText": "<em>Preview</em>",
+                  "level": 4
+               }
+            }
+         },
+         {
+            "widget": "laxarjs/ax-html-display-widget",
+            "features": {
+               "content": {
+                  "resource": "paste",
+                  "attribute": "text"
                }
             }
          }

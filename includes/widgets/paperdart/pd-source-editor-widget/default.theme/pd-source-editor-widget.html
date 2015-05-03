@@ -3,35 +3,22 @@
   <div class="panel-heading" ng-if="model.source.id"><a ng-href="{{ view.link }}">Paste {{ model.source.id }}</a></div>
   <div class="panel-body">
 
-    <form>
+    <form class="form-horizontal">
       <div class="form-group">
-        <input ng-disabled="view.busy"
-               ng-model="model.source.title"
-               class="form-control"
-               placeholder="Title (optional)">
-      </div>
-
-      <div class="form-group">
-        <label ax-for="'source-text'">Source Text</label>
-        <textarea ui-codemirror="view.codemirrorOptions"
-                  ui-refresh='view.cmRefreshCount'
-                  ng-model-options="{ 'debounce': 500 }"
-                  ax-id="'source-text'"
-                  ng-model="model.source.text"></textarea>
-      </div>
-
-      <div class="form-group pull-right">
-        <div class="btn-group" dropdown>
+        <div class="col-md-9" >
+          <input ng-disabled="view.busy"
+                 ng-model="model.source.title"
+                 class="form-control"
+                 placeholder="Title (optional)">
+        </div>
+        <div class="btn-group col-md-3" dropdown>
           <button type="button"
                   ng-class="{ 'ax-disabled': view.busy }"
-                  class="btn btn-default pd-source-editor-mime">{{ view.typeLabels[ model.source.mimeType ] }}
-          </button>
-          <button type="button"
-                  class="btn btn-default dropdown-toggle"
+                  class="btn btn-default pd-source-editor-mime dropdown-toggle pull-right"
                   dropdown-toggle
                   aria-expanded="{{ view.showMimeTypes }}">
+            {{ view.typeLabels[ model.source.mimeType ] }}
             <span class="caret"></span>
-            <span class="sr-only">Select Content Type</span>
           </button>
           <ul class="dropdown-menu"
               role="menu">
@@ -40,14 +27,28 @@
             </li>
           </ul>
         </div>
+      </div>
+    </form>
+    <br>
 
+    <form>
+      <div class="form-group">
+        <label ax-for="'source-text'">Source Text</label>
+        <textarea ax-id="'source-text'"
+                  ui-codemirror="view.codemirrorOptions"
+                  ui-refresh='view.codemirrorRefreshCount'
+                  ng-model-options="{ 'debounce': 250 }"
+                  ng-model="model.source.text"></textarea>
+      </div>
+
+      <div class="form-group pull-right">
         <button type="button"
                 class="btn btn-primary"
                 ng-class="{ 'ax-disabled': view.busy }"
                 ng-click="commands.save()"><i class='fa fa-paper-plane'></i> Save
         </button>
       </div>
-
     </form>
+
   </div>
 </div>

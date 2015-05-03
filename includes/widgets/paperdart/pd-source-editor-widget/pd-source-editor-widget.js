@@ -19,14 +19,15 @@ define( [
       $scope.resources = {};
 
       $scope.model = {
+         source: null,
          mimeTypes: [
-            { mime: 'text/x-markdown', label: 'Markdown' },
-            { mime: 'text/html', label: 'HTML' },
             { mime: 'text/css', label: 'CSS' },
+            { mime: 'text/html', mode: 'htmlmixed', label: 'HTML' },
             { mime: 'text/javascript', label: 'JavaScript' },
-            { mime: 'text/plain', label: 'Plain Text  ' }
-         ],
-         source: null
+            { mime: 'application/json', label: 'JSON' },
+            { mime: 'text/plain', label: 'Plain Text  ' },
+            { mime: 'text/x-markdown', label: 'Markdown' }
+         ]
       };
 
       $scope.view = {
@@ -38,7 +39,7 @@ define( [
             lineNumbers: true,
             readOnly: false
          },
-         cmRefreshCount: 0
+         codemirrorRefreshCount: 0
       };
 
       $scope.commands = {
@@ -53,12 +54,15 @@ define( [
                $scope.view.link = flowService.constructAnchor( '_self', { paste: source.id } );
             }
             $scope.model.source = source;
-            ++$scope.view.cmRefreshCount;
+            $scope.view.codemirrorOptions.mode = source.mimeType;
+            ++$scope.view.codemirrorRefreshCount;
          }
       } );
 
       visibilityService.handlerFor( $scope ).onShow( function() {
-         $scope.$apply( function() { ++$scope.view.cmRefreshCount; } );
+         $scope.$apply( function() {
+            ++$scope.view.codemirrorRefreshCount;
+         } );
       } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,7 +73,7 @@ define( [
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       var updatePublisher = patterns.resources.updatePublisherForFeature( $scope, 'source', {
-         deliverToSender: false
+         deliverToSender: true
       } );
 
       function updateSourceResource() {

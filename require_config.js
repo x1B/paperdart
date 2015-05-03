@@ -43,7 +43,13 @@ var require = {
          }
       },
       'angular-ui-codemirror': {
-         deps: [ 'angular', 'codemirror' ],
+         deps: [
+            'angular',
+            'codemirror/lib/codemirror',
+            'codemirror/mode/javascript/javascript',
+            'codemirror/mode/markdown/markdown',
+            'codemirror/mode/htmlmixed/htmlmixed',
+            'codemirror/mode/css/css' ],
          init: function( angular, codemirror ) {
             window.CodeMirror = codemirror;
             return angular.module( 'ui.codemirror' );
@@ -127,8 +133,7 @@ var require = {
 
       // Widgets:
       'angular-bootstrap': 'angular-bootstrap/ui-bootstrap',
-      'angular-ui-codemirror': 'angular-ui-codemirror/ui-codemirror',
-      'codemirror': 'codemirror/lib/codemirror'
+      'angular-ui-codemirror': 'angular-ui-codemirror/ui-codemirror'
 
    }
 };

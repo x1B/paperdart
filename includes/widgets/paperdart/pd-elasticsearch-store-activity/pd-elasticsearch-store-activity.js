@@ -38,7 +38,6 @@ define( [
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function updateFlags() {
-         console.log( 'update flags!' );
          context.features.flags.forEach( function( flagEntry ) {
             var flag = flagEntry.flag;
             if( !flag in context.flags ) {
