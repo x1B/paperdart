@@ -6,15 +6,16 @@ define( [
    'angular',
    'laxar',
    'laxar_patterns',
-   'angular-bootstrap'
+   'angular-bootstrap',
+   'angular-ui-codemirror'
 ], function( ng, ax, patterns ) {
    'use strict';
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   Controller.$inject = [ '$scope', 'axEventBus', 'axFlowService' ];
+   Controller.$inject = [ '$scope', 'axEventBus', 'axFlowService', 'axVisibilityService' ];
 
-   function Controller( $scope, eventBus, flowService ) {
+   function Controller( $scope, eventBus, flowService, visibilityService ) {
       $scope.resources = {};
 
       $scope.model = {
@@ -31,7 +32,13 @@ define( [
       $scope.view = {
          showMimeTypes: false,
          link: null,
-         typeLabels: kv( $scope.model.mimeTypes, 'mime', 'label' )
+         typeLabels: kv( $scope.model.mimeTypes, 'mime', 'label' ),
+         codemirrorOptions: {
+            lineWrapping : true,
+            lineNumbers: true,
+            readOnly: false
+         },
+         cmRefreshCount: 0
       };
 
       $scope.commands = {
@@ -46,7 +53,12 @@ define( [
                $scope.view.link = flowService.constructAnchor( '_self', { paste: source.id } );
             }
             $scope.model.source = source;
+            ++$scope.view.cmRefreshCount;
          }
+      } );
+
+      visibilityService.handlerFor( $scope ).onShow( function() {
+         $scope.$apply( function() { ++$scope.view.cmRefreshCount; } );
       } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +113,7 @@ define( [
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   return ng.module( 'pdSourceEditorWidget', [ 'ui.bootstrap' ] )
+   return ng.module( 'pdSourceEditorWidget', [ 'ui.bootstrap', 'ui.codemirror' ] )
       .controller( 'PdSourceEditorWidgetController', Controller );
 
 } );
