@@ -22,12 +22,15 @@ define( [
       context.flags = {};
       context.resources = {};
 
-      patterns.resources.handlerFor( context ).registerResourceFromFeature( 'paste', {
-         onUpdateReplace: updateFlags
-      } );
-
       context.features.save.onActions.forEach( function( action ) {
          eventBus.subscribe( 'takeActionRequest.' + action, store );
+      } );
+
+      var replacePublisher = patterns.resources.replacePublisherForFeature( context, 'paste', {
+         deliverToSender: true
+      } );
+      patterns.resources.handlerFor( context ).registerResourceFromFeature( 'paste', {
+         onUpdateReplace: updateFlags
       } );
 
       eventBus.subscribe( 'didNavigate', initializePaste );
@@ -35,6 +38,7 @@ define( [
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function updateFlags() {
+         console.log( 'update flags!' );
          context.features.flags.forEach( function( flagEntry ) {
             var flag = flagEntry.flag;
             if( !flag in context.flags ) {
@@ -44,8 +48,7 @@ define( [
             var resource = context.resources.paste;
             var state = ( !flagEntry.mimeType && !resource ) || ( resource.mimeType === flagEntry.mimeType );
             if( state !== context.flags[ flag ] ) {
-               console.log( 'setting flag', flag, state );
-               context.flags[flag] = state;
+               context.flags[ flag ] = state;
                eventBus.publish( 'didChangeFlag.' + flag + '.' + state, {
                   flag: flag,
                   state: state
@@ -63,21 +66,23 @@ define( [
                return fetchPaste( id );
             }
          }
-         return eventBus.publish( 'didReplace.' + context.features.paste.resource, {
-            resource: context.features.paste.resource,
-            data: {
-               mimeType: "text/x-markdown",
-               text: "# Hello"
-            }
-         } );
+
+         context.resources.paste = {
+            mimeType: "text/x-markdown",
+            text: "# Hello",
+            title: null,
+            id: null
+         };
+         replacePublisher( context.resources.paste );
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function fetchPaste( id ) {
          esClient.get( { index: esIndex, type: esType, id: id } ).then(
-            function( paste ) {
-               console.log( 'got paste:', paste );
+            function( response ) {
+               response._source.id = response._id;
+               replacePublisher( response._source );
             },
             function( error ) {
                if( error.message.indexOf( 'IndexMissingException' ) === 0 ) {
@@ -87,7 +92,7 @@ define( [
                   );
                }
                if( error.message.indexOf( 'Not Found' ) === 0 ) {
-                  return reportError( 'No paste with ID: ' + id + ' <a href="#/">go back</a>', 'get', error );
+                  return reportError( 'No paste with ID: ' + id + ' <a href="#/">new paste</a>', 'get', error );
                }
                return reportError( 'Could not fetch paste', 'get', error );
             }
@@ -109,10 +114,22 @@ define( [
          esClient.index( {
             index: esIndex,
             type: esType,
-            body: paste
+            body: paste,
+            id: paste.id
          } ).then(
-            function() {
-               eventBus.publish( 'didTakeAction.' + event.action );
+            function( response ) {
+               eventBus.publish( 'didTakeAction.' + event.action, {
+                  action: event.action
+               } );
+
+               if( context.resources.paste.id !== response._id ) {
+                  eventBus.publish( 'navigateRequest', {
+                     target: 'paste',
+                     data: {
+                        paste: response._id
+                     }
+                  } );
+               }
             },
             function( error ) {
                ax.log.error( 'Elasticsearch `index` failed: ', error );

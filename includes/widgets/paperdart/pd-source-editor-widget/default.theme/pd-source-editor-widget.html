@@ -1,12 +1,21 @@
 <div class="panel panel-default" ng-if="model.source">
   <div class="panel-heading" ng-if="!model.source.id">Create a new paste</div>
-  <div class="panel-heading" ng-if="model.source.id">Paste <a ng-href="model.view.link">{{ model.source.id }}</a></div>
+  <div class="panel-heading" ng-if="model.source.id"><a ng-href="{{ view.link }}">Paste {{ model.source.id }}</a></div>
   <div class="panel-body">
 
     <form>
       <div class="form-group">
+        <input ng-disabled="view.busy"
+               ng-model="model.source.title"
+               class="form-control"
+               placeholder="Title (optional)">
+      </div>
+
+      <div class="form-group">
         <label ax-for="'source-text'">Source Text</label>
-        <textarea ax-id="'source-text'"
+        <textarea ng-disabled="view.busy"
+                  ng-model-options="{ 'debounce': 150 }"
+                  ax-id="'source-text'"
                   class="form-control"
                   ng-model="model.source.text"
                   rows="12"></textarea>
@@ -15,6 +24,7 @@
       <div class="form-group pull-right">
         <div class="btn-group" dropdown>
           <button type="button"
+                  ng-class="{ 'ax-disabled': view.busy }"
                   class="btn btn-default pd-source-editor-mime">{{ view.typeLabels[ model.source.mimeType ] }}
           </button>
           <button type="button"
@@ -34,6 +44,7 @@
 
         <button type="button"
                 class="btn btn-primary"
+                ng-class="{ 'ax-disabled': view.busy }"
                 ng-click="commands.save()"><i class='fa fa-paper-plane'></i> Save
         </button>
       </div>

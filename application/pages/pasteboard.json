@@ -44,6 +44,9 @@
             "widget": "laxarjs/ax-show-hide-widget",
             "id": "previewShowHide",
             "features": {
+               "animation": {
+                  "enabled": false
+               },
                "visibility": {
                   "toggleOn": "isMarkdown"
                }
@@ -71,7 +74,7 @@
             "features": {
                "headline": {
                   "i18nHtmlText": "Markdown Preview",
-                  "level": 2
+                  "level": 4
                }
             }
          },
@@ -81,7 +84,8 @@
                "markdown": {
                   "resource": "paste",
                   "attribute": "text",
-                  "parameter": "md-section"
+                  "parameter": "md-section",
+                  "url": "README.md"
                }
             }
          }
@@ -89,7 +93,8 @@
 
       "footer": [
          {
-            "widget": "laxarjs/ax-developer-tools-widget"
+            "widget": "laxarjs/ax-developer-tools-widget",
+            "enabled": false
          }
       ]
    }

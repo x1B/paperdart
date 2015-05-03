@@ -12,9 +12,9 @@ define( [
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   Controller.$inject = [ '$scope' ];
+   Controller.$inject = [ '$scope', 'axEventBus', 'axFlowService' ];
 
-   function Controller( $scope ) {
+   function Controller( $scope, eventBus, flowService ) {
       $scope.resources = {};
 
       $scope.model = {
@@ -30,6 +30,7 @@ define( [
 
       $scope.view = {
          showMimeTypes: false,
+         link: null,
          typeLabels: kv( $scope.model.mimeTypes, 'mime', 'label' )
       };
 
@@ -40,21 +41,25 @@ define( [
 
       patterns.resources.handlerFor( $scope ).registerResourceFromFeature( 'source', {
          onUpdateReplace: function() {
-            $scope.model.source = ax.object.deepClone( $scope.resources.source );
+            var source = ax.object.deepClone( $scope.resources.source );
+            if( source.id ) {
+               $scope.view.link = flowService.constructAnchor( '_self', { paste: source.id } );
+            }
+            $scope.model.source = source;
          }
       } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      var updateSourceWithDebounce = ax.fn.debounce( updateSourceResource, 200 );
-      $scope.$watch( 'model.source.text', updateSourceWithDebounce );
-      $scope.$watch( 'model.source.mimeType', updateSourceWithDebounce );
+      $scope.$watch( 'model.source.text', updateSourceResource );
+      $scope.$watch( 'model.source.mimeType', updateSourceResource );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       var updatePublisher = patterns.resources.updatePublisherForFeature( $scope, 'source', {
          deliverToSender: false
       } );
+
       function updateSourceResource() {
          if( $scope.model.source && $scope.resources.source ) {
             updatePublisher.compareAndPublish( $scope.resources.source, $scope.model.source );

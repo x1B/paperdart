@@ -6,10 +6,6 @@
 
       "paste/:paste": {
          "page":  "pasteboard"
-      },
-
-      "paste": {
-         "page":  "pasteboard"
       }
    }
 }
