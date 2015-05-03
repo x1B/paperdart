@@ -97,8 +97,7 @@
                "markdown": {
                   "resource": "paste",
                   "attribute": "text",
-                  "parameter": "md-section",
-                  "url": "README.md"
+                  "parameter": "md-section"
                }
             }
          }

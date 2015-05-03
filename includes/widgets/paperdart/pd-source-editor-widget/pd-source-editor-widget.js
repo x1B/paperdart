@@ -103,7 +103,6 @@ define( [
          eventBus.publishAndGatherReplies( 'takeActionRequest.' + saveAction, {
             action: saveAction
          } ).then( function( responses ) {
-            console.log( 'resp', responses );
             var failed = responses.some( function( _ ) { return _.event.outcome === 'ERROR' } );
             if( failed ) {
                toastr.error( 'Save failed!' );

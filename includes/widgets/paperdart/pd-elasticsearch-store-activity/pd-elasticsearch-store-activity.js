@@ -15,7 +15,7 @@ define( [
       var esIndex = config( 'index', 'paperdart' );
       var esType = config( 'type', 'paste' );
       var esClient = new es.Client( {
-         host:  config( 'host', 'localhost:9200' ),
+         host: config( 'host', '' ),
          log: config( 'logLevel', 'info' )
       } );
 
