@@ -1,0 +1,9 @@
+[submodule "includes/widgets/laxarjs/ax-markdown-display-widget"]
+	path = includes/widgets/laxarjs/ax-markdown-display-widget
+	url = https://github.com/LaxarJS/ax-markdown-display-widget.git
+[submodule "includes/widgets/laxarjs/ax-command-bar-widget"]
+	path = includes/widgets/laxarjs/ax-command-bar-widget
+	url = git@github.com:laxarjs/ax-command-bar-widget.git
+[submodule "includes/widgets/laxarjs/ax-developer-tools-widget"]
+	path = includes/widgets/laxarjs/ax-developer-tools-widget
+	url = git@github.com:laxarjs/ax-developer-tools-widget.git

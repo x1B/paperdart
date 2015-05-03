@@ -1,0 +1,42 @@
+{
+   "name": "PdElasticsearchStoreActivity",
+   "description": "Reads and stores pastes to/from elasticsearch",
+
+   "integration": {
+      "technology": "angular",
+      "type": "activity"
+   },
+
+   "features": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+
+      "properties": {
+
+         "paste": {
+            "type": "object",
+            "required": [ "resource" ],
+            "properties": {
+               "resource": {
+                  "type": "string"
+               }
+            }
+         },
+
+         "save": {
+            "type": "object",
+            "properties": {
+               "onActions": {
+                  "type": "array",
+                  "default": [],
+                  "items": {
+                     "type": "string",
+                     "format": "topic"
+                  }
+               }
+            }
+         }
+
+      }
+   }
+}

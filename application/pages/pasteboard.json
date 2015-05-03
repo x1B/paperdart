@@ -1,0 +1,47 @@
+{
+   "layout": "app",
+
+   "areas": {
+      "activities": [
+         {
+            "widget": "paperdart/pd-elasticsearch-store-activity",
+            "features": {
+               "paste": {
+                  "resource": "paste"
+               },
+               "save": {
+                  "onActions": [ "save" ]
+               }
+            }
+         }
+      ],
+
+      "content": [
+         {
+            "widget": "paperdart/pd-source-editor-widget",
+            "features": {
+               "source": {
+                  "resource": "paste"
+               }
+            }
+         }
+      ],
+
+      "footer": [
+         {
+            "widget": "laxarjs/ax-command-bar-widget",
+            "features": {
+               "buttons": [
+                  {
+                     "i18nHtmlLabel": "Save",
+                     "action": "save"
+                  }
+               ]
+            }
+         },
+         {
+            "widget": "laxarjs/ax-developer-tools-widget"
+         }
+      ]
+   }
+}

@@ -1,0 +1,11 @@
+{
+   "places": {
+      "entry": {
+         "redirectTo": "pasteboard"
+      },
+
+      "pasteboard": {
+         "page":  "pasteboard"
+      }
+   }
+}

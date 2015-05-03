@@ -1,0 +1,36 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Paste Content</div>
+  <div class="panel-body">
+
+    <form>
+      <div class="form-group">
+        <label ax-for="'text'">Source Text</label>
+        <textarea class="form-control pd-source-editor-code"
+                  ng-model="model.source.text"></textarea>
+      </div>
+
+      <label ax-for="'mimeType'">Content Type</label>
+      <div ax-id="'mimeType'"
+           class="btn-group"
+           dropdown>
+        <button type="button"
+                class="btn btn-info">{{ view.typeLabels[ model.source.mimeType ] }}
+        </button>
+        <button type="button"
+                class="btn btn-info dropdown-toggle"
+                dropdown-toggle
+                aria-expanded="{{ view.showMimeTypes }}">
+          <span class="caret"></span>
+          <span class="sr-only">Select Content Type</span>
+        </button>
+        <ul class="dropdown-menu"
+            role="menu">
+          <li ng-repeat="type in model.mimeTypes">
+            <a ng-click="commands.selectMimeType( type )" href="#">{{ type.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+    </form>
+  </div>
+</div>
