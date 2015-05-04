@@ -22,7 +22,6 @@ window.laxar = ( function() {
       widgets: {
          paperdart: {
             elasticsearch: {
-               host: '',
                index: 'paperdart'
             }
          }

@@ -1,6 +1,8 @@
 <div class="panel panel-default" ng-if="model.source">
   <div class="panel-heading" ng-if="!model.source.id">Create a new paste</div>
-  <div class="panel-heading" ng-if="model.source.id"><a ng-href="{{ view.link }}">Paste {{ model.source.id }}</a></div>
+  <div class="panel-heading" ng-if="model.source.id"><a ng-href="{{ view.link }}">
+     <i class="fa fa-link"></i> Permalink</a>
+  </div>
   <div class="panel-body">
 
     <form class="form-horizontal">

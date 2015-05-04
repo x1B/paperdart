@@ -137,6 +137,5 @@ var require = {
       'angular-bootstrap': 'angular-bootstrap/ui-bootstrap',
       'angular-ui-codemirror': 'angular-ui-codemirror/ui-codemirror',
       'toastr': 'toastr/toastr'
-
    }
 };

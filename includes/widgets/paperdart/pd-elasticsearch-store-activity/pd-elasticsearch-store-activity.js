@@ -15,7 +15,7 @@ define( [
       var esIndex = config( 'index', 'paperdart' );
       var esType = config( 'type', 'paste' );
       var esClient = new es.Client( {
-         host: config( 'host', '' ),
+         host: config( 'host', window.location.host ),
          log: config( 'logLevel', 'info' )
       } );
 
@@ -68,7 +68,7 @@ define( [
 
          context.resources.paste = {
             mimeType: "text/x-markdown",
-            text: "# Hello",
+            text: DEFAULT_TEXT,
             title: null,
             id: null
          };
@@ -159,6 +159,15 @@ define( [
    }
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   var DEFAULT_TEXT =
+      "# This is a Pastebin!\n\n" +
+      "> Paste content, create a link to share it!\n\n" +
+      "Replace this text with something you would like to share." +
+      "Hit the _Save_ button to generate a unique URL for your paste, or to update an existing paste.\n\n" +
+      "Select your content type above to change syntax highlighting." +
+      "There is an automatic preview for _Markdown_ and _HTML_ content.\n";
+
 
    return {
       name: 'pdElasticsearchStoreActivity',
