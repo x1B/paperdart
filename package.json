@@ -1,7 +1,7 @@
 {
    "name": "paperdart",
    "description": "A pastebin as an Elasticsearch plugin, built using LaxarJS",
-   "version": "0.1.0-pre",
+   "version": "0.2.0-pre",
    "private": true,
    "repository": {
       "type": "git",
