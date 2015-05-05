@@ -22,16 +22,6 @@
                   "format": "topic"
                }
             }
-         },
-
-         "save": {
-            "type": "object",
-            "properties": {
-               "action": {
-                  "type": "string",
-                  "format": "topic"
-               }
-            }
          }
 
       }

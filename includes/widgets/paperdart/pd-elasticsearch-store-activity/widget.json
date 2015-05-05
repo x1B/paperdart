@@ -21,6 +21,9 @@
                   "type": "string",
                   "format": "topic"
                },
+               "target": {
+                  "type": "string"
+               },
                "parameter": {
                   "type": "string"
                }
@@ -28,7 +31,35 @@
 
          },
 
-         "save": {
+         "create": {
+            "type": "object",
+            "properties": {
+               "onActions": {
+                  "type": "array",
+                  "default": [],
+                  "items": {
+                     "type": "string",
+                     "format": "topic"
+                  }
+               }
+            }
+         },
+
+         "update": {
+            "type": "object",
+            "properties": {
+               "onActions": {
+                  "type": "array",
+                  "default": [],
+                  "items": {
+                     "type": "string",
+                     "format": "topic"
+                  }
+               }
+            }
+         },
+
+         "reset": {
             "type": "object",
             "properties": {
                "onActions": {
@@ -48,14 +79,20 @@
             "default": [],
             "items": {
                "type": "object",
-               "required": [ "mimeType", "flag" ],
+               "required": [ "flag" ],
                "properties": {
-                  "mimeType": {
-                     "type": [ "string", "null" ]
-                  },
                   "flag": {
                      "type": "string",
                      "format": "topic"
+                  },
+                  "mimeType": {
+                     "type": [ "string", "null" ],
+                     "default": null
+                  },
+                  "condition": {
+                     "type": [ "string", "null" ],
+                     "default": null,
+                     "enum": [ "DIRTY", "CREATED", "AVAILABLE", "EMPTY", null ]
                   }
                }
             }

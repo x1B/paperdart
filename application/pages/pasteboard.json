@@ -8,13 +8,22 @@
             "features": {
                "paste": {
                   "resource": "paste",
+                  "target": "paste",
                   "parameter": "paste"
                },
-               "save": {
-                  "onActions": [ "save" ]
+               "create": {
+                  "onActions": [ "create" ]
+               },
+               "update": {
+                  "onActions": [ "update" ]
+               },
+               "reset": {
+                  "onActions": [ "reset" ]
                },
                "flags": [
-                  { "mimeType": null, "flag": "missingPaste" },
+                  { "condition": "AVAILABLE", "flag": "serviceAvailable" },
+                  { "condition": "EMPTY", "flag": "isEmpty" },
+                  { "condition": "DIRTY", "flag": "isDirty" },
                   { "mimeType": "text/x-markdown", "flag": "isMarkdown" },
                   { "mimeType": "text/html", "flag": "isHtml" }
                ]
@@ -34,9 +43,12 @@
                   "enabled": false
                },
                "visibility": {
-                  "toggleOn": "!missingPaste"
+                  "toggleOn": "serviceAvailable"
                }
             }
+         },
+         {
+            "widget": "laxarjs/ax-developer-tools-widget"
          }
       ],
 
@@ -73,10 +85,32 @@
             "features": {
                "source": {
                   "resource": "paste"
-               },
-               "save": {
-                  "action": "save"
                }
+            }
+         },
+         {
+            "widget": "laxarjs/ax-command-bar-widget",
+            "features": {
+               "buttons": [
+                  {
+                     "i18nHtmlLabel": "<i class='fa fa-bolt'></i> Fresh Paste",
+                     "action": "reset",
+                     "align": "RIGHT",
+                     "disableOn": [ "isEmpty" ]
+                  },
+                  {
+                     "i18nHtmlLabel": "<i class='fa fa-recycle'></i> Update",
+                     "action": "update",
+                     "align": "RIGHT",
+                     "disableOn": [ "!isDirty" ]
+                  },
+                  {
+                     "i18nHtmlLabel": "<i class='fa fa-paper-plane'></i> Create",
+                     "action": "create",
+                     "class": "PRIMARY",
+                     "align": "RIGHT"
+                  }
+               ]
             }
          }
       ],
@@ -121,13 +155,6 @@
                   "attribute": "text"
                }
             }
-         }
-      ],
-
-      "footer": [
-         {
-            "widget": "laxarjs/ax-developer-tools-widget",
-            "enabled": false
          }
       ]
    }
