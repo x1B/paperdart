@@ -1,13 +1,14 @@
 <div class="panel panel-default" ng-if="model.source">
   <div class="panel-heading" ng-if="!model.source.id">Create a new paste</div>
-  <div class="panel-heading" ng-if="model.source.id"><a ng-href="{{ view.link }}">
-     <i class="fa fa-link"></i> Permalink</a>
+  <div class="panel-heading" ng-if="model.source.id">
+     <a ng-href="{{ view.link }}"><i class="fa fa-link"></i> Permalink</a>
+     <span ng-if="view.originLink">(<a ng-href="{{ view.originLink }}">parent</a>)</span>
   </div>
   <div class="panel-body">
 
     <form class="form-horizontal">
       <div class="form-group">
-        <div class="col-md-9" >
+        <div class="col-md-9">
           <input ng-disabled="view.busy"
                  ng-model="model.source.title"
                  class="form-control"
@@ -39,17 +40,10 @@
         <textarea ax-id="'source-text'"
                   ui-codemirror="view.codemirrorOptions"
                   ui-refresh='view.codemirrorRefreshCount'
-                  ng-model-options="{ 'debounce': 250 }"
+                  ng-model-options="{ 'debounce': 100 }"
                   ng-model="model.source.text"></textarea>
       </div>
 
-      <div class="form-group pull-right">
-        <button type="button"
-                class="btn btn-primary"
-                ng-class="{ 'ax-disabled': view.busy }"
-                ng-click="commands.save()"><i class='fa fa-paper-plane'></i> Save
-        </button>
-      </div>
     </form>
 
   </div>

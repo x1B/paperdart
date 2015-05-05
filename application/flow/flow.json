@@ -1,15 +1,16 @@
 {
    "places": {
       "entry": {
-         "redirectTo": "new"
+         "redirectTo": "paste/intro"
       },
 
       "paste/:paste": {
          "page":  "pasteboard"
       },
 
-      "new": {
+      "blank": {
          "page":  "pasteboard"
       }
    }
+
 }

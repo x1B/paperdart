@@ -34,6 +34,7 @@ define( [
       $scope.view = {
          showMimeTypes: false,
          link: null,
+         originLink: null,
          typeLabels: kv( $scope.model.mimeTypes, 'mime', 'label' ),
          codemirrorOptions: {
             lineWrapping : true,
@@ -54,6 +55,9 @@ define( [
             if( source.id ) {
                $scope.view.link = flowService.constructAnchor( '_self', { paste: source.id } );
             }
+            $scope.view.originLink = source.originId ?
+               flowService.constructAnchor( '_self', { paste: source.originId} ) :
+               null;
             $scope.model.source = source;
             $scope.view.codemirrorOptions.mode = source.mimeType;
             ++$scope.view.codemirrorRefreshCount;
@@ -68,8 +72,9 @@ define( [
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      $scope.$watch( 'model.source.text', updateSourceResource );
-      $scope.$watch( 'model.source.mimeType', updateSourceResource );
+      $scope.$watch( 'model.source.text', publishChanges );
+      $scope.$watch( 'model.source.title', publishChanges );
+      $scope.$watch( 'model.source.mimeType', publishChanges );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -77,7 +82,7 @@ define( [
          deliverToSender: true
       } );
 
-      function updateSourceResource() {
+      function publishChanges() {
          if( $scope.model.source && $scope.resources.source ) {
             updatePublisher.compareAndPublish( $scope.resources.source, $scope.model.source );
             $scope.resources.source = ax.object.deepClone( $scope.model.source );
