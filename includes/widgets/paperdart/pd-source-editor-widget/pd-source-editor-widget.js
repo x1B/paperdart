@@ -20,6 +20,7 @@ define( [
 
       $scope.model = {
          source: null,
+         titleSuffix: document.title,
          mimeTypes: [
             { mime: 'text/css', label: 'CSS' },
             { mime: 'text/html', mode: 'htmlmixed', label: 'HTML' },
@@ -72,7 +73,10 @@ define( [
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       $scope.$watch( 'model.source.text', publishChanges );
-      $scope.$watch( 'model.source.title', publishChanges );
+      $scope.$watch( 'model.source.title', function( newValue ) {
+         publishChanges();
+         document.title = (newValue ? newValue + ' - ' : '' ) + $scope.model.titleSuffix;
+      } );
       $scope.$watch( 'model.source.mimeType', publishChanges );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +110,7 @@ define( [
          var saveAction = $scope.features.save.action;
          eventBus.publishAndGatherReplies( 'takeActionRequest.' + saveAction, {
             action: saveAction
-         } ).then( function( responses ) {
+         } ).then( function() {
             $scope.view.busy = false;
          } );
       }
