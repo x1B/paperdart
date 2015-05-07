@@ -28,6 +28,14 @@
                   { "mimeType": "text/html", "flag": "isHtml" }
                ]
             }
+         },
+         {
+            "widget": "laxarjs/ax-developer-tools-widget",
+            "features": {
+               "button": {
+                  "enabled": false
+               }
+            }
          }
       ],
 

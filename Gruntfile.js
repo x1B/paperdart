@@ -114,35 +114,7 @@ module.exports = function( grunt ) {
       watch: {
          options: {
             livereload: liveReloadPort,
-            reload: true
-         },
-         Gruntfile: {
-            files: __filename
-         },
-         application: {
-            files: [
-               'application/**/!(scss)/*.*'
-            ]
-         },
-         libraries: {
-            files: [
-               'includes/lib/*/!(bower_components|node_modules)/**',
-               'includes/themes/*.theme/!(bower_components|node_modules)/**'
-            ]
-         },
-         dependencies: {
-            files: [
-               '<%= directory_tree.application.src %>',
-               '<%= directory_tree.includes.src %>'
-            ],
-            tasks: [
-               'directory_tree:application',
-               'directory_tree:includes',
-               'laxar_application_dependencies'
-            ],
-            options: {
-               event: [ 'added', 'deleted' ]
-            }
+            reload: false
          }
       }
    } );
@@ -155,12 +127,6 @@ module.exports = function( grunt ) {
       .forEach( function( widget ) {
          var config = grunt.config( 'widget.' + widget );
          grunt.config( 'widget.' + widget, grunt.util._.defaults( {}, config ) );
-         grunt.config( 'watch.' + widget, {
-            files: [
-               widget + '/!(bower_components|node_modules)',
-               widget + '/!(bower_components|node_modules)/**'
-            ]
-         } );
       } );
 
    grunt.loadNpmTasks( 'grunt-laxar' );
