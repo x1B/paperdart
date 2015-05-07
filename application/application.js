@@ -10,11 +10,6 @@ window.laxar = ( function() {
       description: 'A pastebin as an Elasticsearch plugin, built using LaxarJS',
       theme: 'default',
 
-      fileListings: {
-         'application': 'var/listing/application_resources.json',
-         'bower_components': 'var/listing/bower_components_resources.json',
-         'includes': 'var/listing/includes_resources.json'
-      },
       useEmbeddedFileListings: mode === 'RELEASE',
       useMergedCss: mode === 'RELEASE',
       eventBusTimeoutMs: (mode === 'RELEASE' ? 120 : 10) * 1000,
@@ -22,6 +17,7 @@ window.laxar = ( function() {
       widgets: {
          paperdart: {
             elasticsearch: {
+               host: 'localhost:9200',
                index: 'paperdart'
             }
          }

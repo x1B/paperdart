@@ -16,7 +16,7 @@ define( [
       var esType = config( 'type', 'paste' );
       var esClient = new es.Client( {
          host: config( 'host', window.location.host ),
-         log: config( 'logLevel', 'trace' )
+         log: config( 'logLevel', ax.configuration.get( 'logging.threshold', 'info' ) )
       } );
 
       context.resources = {};

@@ -46,9 +46,6 @@
                   "toggleOn": "serviceAvailable"
                }
             }
-         },
-         {
-            "widget": "laxarjs/ax-developer-tools-widget"
          }
       ],
 
