@@ -130,6 +130,7 @@ var require = {
       'laxar-path-flow': '../application/flow/flow.json',
 
       // App-specific, LaxarJS-related paths
+      'laxar-application': '..',
       'laxar-app-dependencies': '../var/static/laxar_application_dependencies',
 
 

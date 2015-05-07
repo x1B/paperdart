@@ -24,26 +24,6 @@ module.exports = function( grunt ) {
             jshintrc: __dirname + '/.jshintrc'
          }
       },
-      compress: {
-         default: {
-            options: {
-               archive: '<%= pkg.name %>-<%= pkg.version %>.zip',
-               mode: 'zip'
-            },
-            files: [ {
-               src: [
-                  '*.+(css|html|js|json)',
-                  'application/**',
-                  'bower_components/**',
-                  'includes/+(controls|lib|themes|widgets)/**',
-                  'static/**',
-                  'var/**',
-                  '!includes/**/+(bower_components|node_modules)/**'
-               ],
-               filter: 'isFile'
-            } ]
-         }
-      },
       laxar_application_dependencies: {
          default: {
             options: {},
@@ -54,6 +34,18 @@ module.exports = function( grunt ) {
       css_merger: {
          default: {
             src: [ 'application/flow/*.json' ]
+         }
+      },
+      cssmin: {
+         default: {
+            options: {
+               keepSpecialComments: 0
+            },
+            files: [ {
+               expand: true,
+               src: 'var/static/css/*.theme.css',
+               ext: '.theme.css'
+            } ]
          }
       },
       directory_tree: {
@@ -99,12 +91,22 @@ module.exports = function( grunt ) {
             }
          }
       },
+      concat: {
+         build: {
+            src: [
+               'require_config.js',
+               'bower_components/requirejs/require.js'
+            ],
+            dest: 'var/build/require_configured.js'
+         }
+      },
       requirejs: {
          default: {
             options: {
                mainConfigFile: 'require_config.js',
+               deps: [ '../var/build/require_configured' ],
                name: '../init',
-               out: 'var/build/optimized_init.js',
+               out: 'var/build/bundle.js',
                optimize: 'uglify2'
             }
          }
@@ -162,16 +164,16 @@ module.exports = function( grunt ) {
       } );
 
    grunt.loadNpmTasks( 'grunt-laxar' );
-   grunt.loadNpmTasks( 'grunt-contrib-compass' );
-   grunt.loadNpmTasks( 'grunt-contrib-compress' );
+   grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
+   grunt.loadNpmTasks( 'grunt-contrib-concat' );
    grunt.loadNpmTasks( 'grunt-contrib-watch' );
 
    grunt.registerTask( 'server', [ 'connect' ] );
    grunt.registerTask( 'build', [ 'directory_tree', 'laxar_application_dependencies' ] );
-   grunt.registerTask( 'optimize', [ 'build', 'css_merger', 'requirejs' ] );
+   grunt.registerTask( 'optimize', [ 'build', 'css_merger', 'concat', 'requirejs' ] );
    grunt.registerTask( 'test', [ 'server', 'widgets' ] );
    grunt.registerTask( 'default', [ 'build', 'test' ] );
-   grunt.registerTask( 'dist', [ 'optimize', 'compress' ] );
+   grunt.registerTask( 'dist', [ 'optimize' ] );
    grunt.registerTask( 'start', [ 'build', 'server', 'watch' ] );
 
 };

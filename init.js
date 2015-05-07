@@ -4,9 +4,17 @@
  */
 require( [
    'laxar-app-dependencies',
-   'laxar'
-], function( widgetModules, ax ) {
+   'laxar',
+   'json!laxar-application/var/listing/application_resources.json',
+   'json!laxar-application/var/listing/bower_components_resources.json',
+   'json!laxar-application/var/listing/includes_resources.json'
+], function( widgetModules, ax, appResources, bowerResources, includeResources ) {
    'use strict';
 
+   laxar.fileListings = {
+      application: appResources,
+      bower_components: bowerResources,
+      includes: includeResources
+   };
    ax.bootstrap( widgetModules );
 } );
