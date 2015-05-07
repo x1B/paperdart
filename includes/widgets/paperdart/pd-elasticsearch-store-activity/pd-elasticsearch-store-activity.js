@@ -4,20 +4,20 @@
  */
 define( [
    'laxar',
-   'laxar_patterns',
-   'elasticsearch/elasticsearch'
-], function( ax, patterns, es ) {
+   'laxar_patterns'
+], function( ax, patterns ) {
    'use strict';
 
    Controller.$inject = [ 'axContext', 'axEventBus' ];
 
    function Controller( context, eventBus ) {
+
+      // may require fetch polyfill!
+      var fetch = window.fetch;
+
+      var esHost = window.location.protocol + '//' + config( 'host', window.location.host );
       var esIndex = config( 'index', 'paperdart' );
       var esType = config( 'type', 'paste' );
-      var esClient = new es.Client( {
-         host: config( 'host', window.location.host ),
-         log: config( 'logLevel', ax.configuration.get( 'logging.threshold', 'info' ) )
-      } );
 
       context.resources = {};
       context.flags = {};
@@ -50,7 +50,7 @@ define( [
 
       function initializePaste( navigateEvent ) {
          var initial = {
-            mimeType: "text/x-markdown",
+            mimeType: 'text/x-markdown',
             text: '',
             title: null,
             id: null
@@ -76,13 +76,13 @@ define( [
          var resource = context.resources.paste;
          context.features.flags.forEach( function( flagEntry ) {
             var flag = flagEntry.flag;
-            if( !flag in context.flags ) {
+            if( !( flag in context.flags ) ) {
                context.flags[ flag ] = false;
             }
 
-            var value = ( flagEntry.condition === "AVAILABLE" && !!resource )
-               || ( flagEntry.condition === "DIRTY" && context.model.dirty )
-               || ( flagEntry.condition === "EMPTY" && ( !resource.text && !resource.title ) )
+            var value = ( flagEntry.condition === 'AVAILABLE' && !!resource )
+               || ( flagEntry.condition === 'DIRTY' && context.model.dirty )
+               || ( flagEntry.condition === 'EMPTY' && ( !resource.text && !resource.title ) )
                || ( resource.mimeType === flagEntry.mimeType );
 
             if( value !== context.flags[ flag ] ) {
@@ -125,31 +125,36 @@ define( [
 
       function submit( event, paste, id ) {
          eventBus.publish( 'willTakeAction.' + event.action, { action: event.action } );
-         return esClient.index( {
-            index: esIndex,
-            type: esType,
-            body: paste,
-            id: id
+         return fetch( pasteUrl( id ), {
+            method: id ? 'PUT' : 'POST',
+            body: JSON.stringify( paste )
          } ).then(
             function( response ) {
-               eventBus.publish( 'didTakeAction.' + event.action, { action: event.action } );
-               context.model.dirty = false;
-               updateFlags();
+               if( response.ok ) {
+                  return response.json().then( function ( body ) {
+                     eventBus.publish( 'didTakeAction.' + event.action, {action: event.action} );
+                     context.model.dirty = false;
+                     updateFlags();
 
-               if( context.resources.paste.id !== response._id ) {
-                  context.resources.paste.id = response._id;
-                  navigateToPaste( response._id );
+                     if ( context.resources.paste.id !== body._id ) {
+                        context.resources.paste.id = body._id;
+                        navigateToPaste( body._id );
+                     }
+                  } );
                }
+               handleError( response.statusText );
             },
-            function( error ) {
-               var operation = id ? 'update' : 'create';
-               reportError( 'Could not ' + operation + ' paste', 'index', error );
-               eventBus.publish( 'didTakeAction.' + event.action, {
-                  action: event.action,
-                  outcome: 'ERROR'
-               } );
-            }
+            handleError
          );
+
+         function handleError( error ) {
+            var operation = id ? 'update' : 'create';
+            reportError( 'Could not ' + operation + ' paste', 'index', error );
+            eventBus.publish( 'didTakeAction.' + event.action, {
+               action: event.action,
+               outcome: 'ERROR'
+            } );
+         }
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,25 +171,37 @@ define( [
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function fetchPaste( id ) {
-         esClient.get( { index: esIndex, type: esType, id: id } ).then(
+         fetch( pasteUrl( id ) ).then(
             function( response ) {
-               context.resources.paste = response._source;
-               context.resources.paste.id = response._id;
-               return propagatePasteResource();
-            },
-            function( error ) {
+               if( response.ok ) {
+                  return response.json().then( function( body ) {
+                     context.resources.paste = body._source;
+                     context.resources.paste.id = body._id;
+                     return propagatePasteResource();
+                  } );
+               }
+
+               // :TODO:
+               /*
                if( error.message.indexOf( 'IndexMissingException' ) === 0 ) {
                   return tryCreateIndex().then(
                      function() { return fetchPaste( id ); },
                      function( error ) { reportError( 'Could not create index!', 'index.create', error ); }
                   );
                }
-               if( error.message.indexOf( 'Not Found' ) === 0 ) {
-                  return reportError( 'Could not find paste ' + id + '! <a href="#/create">Create new</a>', 'get', error );
-               }
+               */
+               return reportError( 'Could not find paste ' + id + '! <a href="#/create">Create new</a>', 'get', response.statusText );
+            },
+            function( error ) {
                return reportError( 'Could not fetch paste!', 'get', error );
             }
          );
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      function pasteUrl( id ) {
+         return esHost + '/' + esIndex + '/' + esType + '/' + ( id ? id : '' );
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,12 +240,12 @@ define( [
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    var INTRO_TEXT =
-      "# This is a Pastebin!\n\n" +
-      "> Paste content, create a link to share it!\n\n" +
-      "Replace this text with something you would like to share. " +
-      "Hit the _Save_ button to generate a unique URL for your paste, or to update an existing paste.\n\n" +
-      "Select your content type above to change syntax highlighting. " +
-      "There is an automatic preview for _Markdown_ and _HTML_ content.\n";
+      '# This is a Pastebin!\n\n' +
+      '> Paste content, create a link to share it!\n\n' +
+      'Replace this text with something you would like to share. ' +
+      'Hit the _Save_ button to generate a unique URL for your paste, or to update an existing paste.\n\n' +
+      'Select your content type above to change syntax highlighting. ' +
+      'There is an automatic preview for _Markdown_ and _HTML_ content.\n';
 
    return {
       name: 'pdElasticsearchStoreActivity',

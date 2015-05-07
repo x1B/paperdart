@@ -1,6 +1,8 @@
 var require = {
    baseUrl: 'bower_components',
    deps: [
+      'es6-promise/promise',
+      'fetch/fetch'
    ],
    shim: {
       angular: {
@@ -39,6 +41,7 @@ var require = {
       'angular-bootstrap': {
          deps: [ 'angular' ],
          init: function( angular ) {
+            'use strict';
             return angular.module( 'ui.bootstrap' );
          }
       },
@@ -52,11 +55,12 @@ var require = {
             'codemirror/mode/css/css'
          ],
          init: function( angular, codemirror ) {
+            'use strict';
             window.CodeMirror = codemirror;
             return angular.module( 'ui.codemirror' );
          }
       },
-      'toastr': [ 'jquery' ],
+
       'bootstrap-affix': {
          deps: [ 'jquery' ]
       },
