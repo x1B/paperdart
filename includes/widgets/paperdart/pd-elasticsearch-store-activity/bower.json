@@ -8,7 +8,6 @@
       "laxar_patterns": "LaxarJS/laxar_patterns#0.x"
    },
    "devDependencies": {
-      "es5-shim": "2.3.x",
       "jasmine": "1.3.x"
    }
 }

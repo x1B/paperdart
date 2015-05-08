@@ -4,26 +4,24 @@
  */
 define( [
    'laxar',
-   'laxar_patterns',
-   'elasticsearch/elasticsearch'
-], function( ax, patterns, es ) {
+   'laxar_patterns'
+], function( ax, patterns ) {
    'use strict';
 
    Controller.$inject = [ 'axContext', 'axEventBus' ];
 
    function Controller( context, eventBus ) {
+
+      var win = window;
+      var fetch = win.fetch;
+
+      var esHost = win.location.protocol + '//' + config( 'host', win.location.host );
       var esIndex = config( 'index', 'paperdart' );
       var esType = config( 'type', 'paste' );
-      var esClient = new es.Client( {
-         host: config( 'host', window.location.host ),
-         log: config( 'logLevel', ax.configuration.get( 'logging.threshold', 'info' ) )
-      } );
 
       context.resources = {};
       context.flags = {};
-      context.model = {
-         dirty: false
-      };
+      context.model = { dirty: false };
 
       context.features.create.onActions.forEach( function( action ) {
          eventBus.subscribe( 'takeActionRequest.' + action, performCreateAction );
@@ -38,8 +36,12 @@ define( [
       } );
 
       patterns.resources.handlerFor( context ).registerResourceFromFeature( 'paste', {
-         onUpdateReplace: function() {
+         onUpdate: function() {
             context.model.dirty = !!context.resources.paste.id;
+            updateFlags();
+         },
+         onReplace: function() {
+            context.model.dirty = false;
             updateFlags();
          }
       } );
@@ -50,7 +52,7 @@ define( [
 
       function initializePaste( navigateEvent ) {
          var initial = {
-            mimeType: "text/x-markdown",
+            mimeType: 'text/x-markdown',
             text: '',
             title: null,
             id: null
@@ -76,16 +78,12 @@ define( [
          var resource = context.resources.paste;
          context.features.flags.forEach( function( flagEntry ) {
             var flag = flagEntry.flag;
-            if( !flag in context.flags ) {
-               context.flags[ flag ] = false;
-            }
+            var value = ( flagEntry.condition === 'AVAILABLE' && !!resource ) ||
+               ( flagEntry.condition === 'DIRTY' && context.model.dirty ) ||
+               ( flagEntry.condition === 'EMPTY' && ( !resource.text && !resource.title ) ) ||
+               ( resource.mimeType === flagEntry.mimeType );
 
-            var value = ( flagEntry.condition === "AVAILABLE" && !!resource )
-               || ( flagEntry.condition === "DIRTY" && context.model.dirty )
-               || ( flagEntry.condition === "EMPTY" && ( !resource.text && !resource.title ) )
-               || ( resource.mimeType === flagEntry.mimeType );
-
-            if( value !== context.flags[ flag ] ) {
+            if( !( flag in context.flags ) || value !== context.flags[ flag ] ) {
                context.flags[ flag ] = value;
                eventBus.publish( 'didChangeFlag.' + flag + '.' + value, {
                   flag: flag,
@@ -125,31 +123,36 @@ define( [
 
       function submit( event, paste, id ) {
          eventBus.publish( 'willTakeAction.' + event.action, { action: event.action } );
-         return esClient.index( {
-            index: esIndex,
-            type: esType,
-            body: paste,
-            id: id
+         return fetch( pasteUrl( id ), {
+            method: id ? 'PUT' : 'POST',
+            body: JSON.stringify( paste )
          } ).then(
             function( response ) {
-               eventBus.publish( 'didTakeAction.' + event.action, { action: event.action } );
-               context.model.dirty = false;
-               updateFlags();
+               if( response.ok ) {
+                  return response.json().then( function ( body ) {
+                     eventBus.publish( 'didTakeAction.' + event.action, {action: event.action} );
+                     context.model.dirty = false;
+                     updateFlags();
 
-               if( context.resources.paste.id !== response._id ) {
-                  context.resources.paste.id = response._id;
-                  navigateToPaste( response._id );
+                     if ( context.resources.paste.id !== body._id ) {
+                        context.resources.paste.id = body._id;
+                        navigateToPaste( body._id );
+                     }
+                  } );
                }
+               handleError( response.statusText );
             },
-            function( error ) {
-               var operation = id ? 'update' : 'create';
-               reportError( 'Could not ' + operation + ' paste', 'index', error );
-               eventBus.publish( 'didTakeAction.' + event.action, {
-                  action: event.action,
-                  outcome: 'ERROR'
-               } );
-            }
+            handleError
          );
+
+         function handleError( error ) {
+            var operation = id ? 'update' : 'create';
+            report( 'Could not ' + operation + ' paste', 'index', error );
+            eventBus.publish( 'didTakeAction.' + event.action, {
+               action: event.action,
+               outcome: 'ERROR'
+            } );
+         }
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -166,50 +169,67 @@ define( [
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function fetchPaste( id ) {
-         esClient.get( { index: esIndex, type: esType, id: id } ).then(
+         fetch( pasteUrl( id ) ).then(
             function( response ) {
-               context.resources.paste = response._source;
-               context.resources.paste.id = response._id;
-               return propagatePasteResource();
+               if( response.ok ) {
+                  return response.json().then( function( body ) {
+                     context.resources.paste = body._source;
+                     context.resources.paste.id = body._id;
+                     return propagatePasteResource();
+                  } );
+               }
+
+               return response.json().then(
+                  function( body ) {
+                     if( body.error && body.error.indexOf( 'IndexMissingException' ) === 0 ) {
+                        ax.log.info( 'No index ' + esIndex + '. Trying to create.' );
+                        return tryCreateIndex().then(
+                           function() { return fetchPaste( id ); },
+                           function( error ) { report( 'Could not create index!', 'index.create', error ); }
+                        );
+                     }
+                     return report(
+                        'Could not find paste <em>' + id + '</em>! <a href="#/blank">Create new</a>',
+                        'get', response
+                     );
+                  }
+               );
             },
             function( error ) {
-               if( error.message.indexOf( 'IndexMissingException' ) === 0 ) {
-                  return tryCreateIndex().then(
-                     function() { return fetchPaste( id ); },
-                     function( error ) { reportError( 'Could not create index!', 'index.create', error ); }
-                  );
-               }
-               if( error.message.indexOf( 'Not Found' ) === 0 ) {
-                  return reportError( 'Could not find paste ' + id + '! <a href="#/create">Create new</a>', 'get', error );
-               }
-               return reportError( 'Could not fetch paste!', 'get', error );
+               return report( 'Could not fetch paste!', 'get', error );
             }
          );
+
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function tryCreateIndex() {
-         return esClient.indices.create( { index: esIndex } );
+         return fetch( esHost + '/' + esIndex + '/', { method: 'PUT' } );
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      function pasteUrl( id ) {
+         return esHost + '/' + esIndex + '/' + esType + '/' + ( id ? id : '' );
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       var replacePublisher = patterns.resources.replacePublisherForFeature( context, 'paste' );
       function propagatePasteResource() {
+         context.model.dirty = false;
          updateFlags();
          return replacePublisher( context.resources.paste );
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      function reportError( message, esOperation, esError, code ) {
-         code = code || 'HTTP_GET';
-         ax.log.error( message, esError );
-         return eventBus.publish( 'didEncounterError.' + code, {
-            code: code,
-            message: message + ' (elasticsearch <em>' + esOperation + '</em> failed: ' + esError.message +')'
-         } );
+      function report( message, esOperation, response ) {
+         var msg =
+            message + ' (Elasticsearch <em>' + esOperation + '</em> failed with ' + response.status +')';
+         ax.log.info( msg );
+         return eventBus.publish( 'didEncounterError.' + esOperation, { code: esOperation, message: msg } );
       }
 
    }
@@ -223,12 +243,12 @@ define( [
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    var INTRO_TEXT =
-      "# This is a Pastebin!\n\n" +
-      "> Paste content, create a link to share it!\n\n" +
-      "Replace this text with something you would like to share. " +
-      "Hit the _Save_ button to generate a unique URL for your paste, or to update an existing paste.\n\n" +
-      "Select your content type above to change syntax highlighting. " +
-      "There is an automatic preview for _Markdown_ and _HTML_ content.\n";
+      '# This is a Pastebin!\n\n' +
+      '> Paste content, create a link to share it!\n\n' +
+      'Replace this text with something you would like to share. ' +
+      'Hit the _Save_ button to generate a unique URL for your paste, or to update an existing paste.\n\n' +
+      'Select your content type above to change syntax highlighting. ' +
+      'There is an automatic preview for _Markdown_ and _HTML_ content.\n';
 
    return {
       name: 'pdElasticsearchStoreActivity',

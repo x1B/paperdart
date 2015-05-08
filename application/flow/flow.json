@@ -8,7 +8,7 @@
          "page":  "pasteboard"
       },
 
-      "blank": {
+      "paste/:paste/blank": {
          "page":  "pasteboard"
       }
    }
