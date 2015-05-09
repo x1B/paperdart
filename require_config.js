@@ -46,7 +46,8 @@ var require = {
       // Widgets:
       'angular-bootstrap': 'angular-bootstrap/ui-bootstrap',
       'angular-ui-codemirror': 'angular-ui-codemirror/ui-codemirror',
-      'toastr': 'toastr/toastr'
+
+      'paperdart': '../includes/lib/paperdart/paperdart'
    },
    shim: {
       angular: {

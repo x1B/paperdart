@@ -1,0 +1,17 @@
+{
+   "name": "PdFirebaseStoreActivity",
+   "description": "My new LaxarJS activity",
+
+   "integration": {
+      "technology": "angular",
+      "type": "activity"
+   },
+
+   "features": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+
+      }
+   }
+}

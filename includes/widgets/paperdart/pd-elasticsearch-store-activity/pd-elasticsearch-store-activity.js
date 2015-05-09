@@ -4,132 +4,39 @@
  */
 define( [
    'laxar',
-   'laxar_patterns'
-], function( ax, patterns ) {
+   'laxar_patterns',
+   'paperdart'
+], function( ax, patterns, paperdart ) {
    'use strict';
 
    Controller.$inject = [ 'axContext', 'axEventBus' ];
 
    function Controller( context, eventBus ) {
 
+      var delegate = paperdart.createMasterDelegate( context, eventBus, {
+         create: submit,
+         read: fetchPaste,
+         update: submit
+      } );
+
       var win = window;
       var fetch = win.fetch;
-
       var esHost = win.location.protocol + '//' + config( 'host', win.location.host );
       var esIndex = config( 'index', 'paperdart' );
       var esType = config( 'type', 'paste' );
 
-      context.resources = {};
-      context.flags = {};
-      context.model = { dirty: false };
-
-      context.features.create.onActions.forEach( function( action ) {
-         eventBus.subscribe( 'takeActionRequest.' + action, performCreateAction );
-      } );
-
-      context.features.update.onActions.forEach( function( action ) {
-         eventBus.subscribe( 'takeActionRequest.' + action, performUpdateAction );
-      } );
-
-      context.features.reset.onActions.forEach( function( action ) {
-         eventBus.subscribe( 'takeActionRequest.' + action, performResetAction );
-      } );
-
-      patterns.resources.handlerFor( context ).registerResourceFromFeature( 'paste', {
-         onUpdate: function() {
-            context.model.dirty = !!context.resources.paste.id;
-            updateFlags();
-         },
-         onReplace: function() {
-            context.model.dirty = false;
-            updateFlags();
-         }
-      } );
-
-      eventBus.subscribe( 'didNavigate', initializePaste );
-
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      function initializePaste( navigateEvent ) {
-         var initial = {
-            mimeType: 'text/x-markdown',
-            text: '',
-            title: null,
-            id: null
-         };
-
-         if( navigateEvent.data ) {
-            var id = navigateEvent.data[ context.features.paste.parameter ];
-            if( id === 'intro' ) {
-               initial.text = INTRO_TEXT;
-            }
-            else if( id ) {
-               return fetchPaste( id );
-            }
-         }
-
-         context.resources.paste = initial;
-         return propagatePasteResource();
-      }
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-      function updateFlags() {
-         var resource = context.resources.paste;
-         context.features.flags.forEach( function( flagEntry ) {
-            var flag = flagEntry.flag;
-            var value = ( flagEntry.condition === 'AVAILABLE' && !!resource ) ||
-               ( flagEntry.condition === 'DIRTY' && context.model.dirty ) ||
-               ( flagEntry.condition === 'EMPTY' && ( !resource.text && !resource.title ) ) ||
-               ( resource.mimeType === flagEntry.mimeType );
-
-            if( !( flag in context.flags ) || value !== context.flags[ flag ] ) {
-               context.flags[ flag ] = value;
-               eventBus.publish( 'didChangeFlag.' + flag + '.' + value, {
-                  flag: flag,
-                  state: value
-               } );
-            }
-         } );
-      }
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-      function performCreateAction( event ) {
-         var paste = context.resources.paste;
-         if( paste.id ) {
-            paste.originId = paste.id;
-         }
-         return submit( event, paste, null );
-      }
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-      function performUpdateAction( event ) {
-         var paste = context.resources.paste;
-         return submit( event, paste, context.resources.paste.id );
-      }
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-      function performResetAction( event ) {
+      function submit( event, paste, maybeId ) {
          eventBus.publish( 'willTakeAction.' + event.action, { action: event.action } );
-         return navigateToPaste( '' ).then( function() {
-            eventBus.publish( 'didTakeAction.' + event.action, { action: event.action } );
-         } );
-      }
-
-      ///////////////////////////////////////// ///////////////////////////////////////////////////////////////
-
-      function submit( event, paste, id ) {
-         eventBus.publish( 'willTakeAction.' + event.action, { action: event.action } );
-         return fetch( pasteUrl( id ), {
-            method: id ? 'PUT' : 'POST',
+         return fetch( pasteUrl( maybeId ), {
+            method: maybeId ? 'PUT' : 'POST',
             body: JSON.stringify( paste )
          } ).then(
             function( response ) {
                if( response.ok ) {
                   return response.json().then( function ( body ) {
+                     // :TODO: move this to the delegate
                      eventBus.publish( 'didTakeAction.' + event.action, {action: event.action} );
                      context.model.dirty = false;
                      updateFlags();
@@ -146,24 +53,13 @@ define( [
          );
 
          function handleError( error ) {
-            var operation = id ? 'update' : 'create';
+            var operation = maybeId ? 'update' : 'create';
             report( 'Could not ' + operation + ' paste', 'index', error );
             eventBus.publish( 'didTakeAction.' + event.action, {
                action: event.action,
                outcome: 'ERROR'
             } );
          }
-      }
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-      function navigateToPaste( id ) {
-         return eventBus.publish( 'navigateRequest', {
-            target: context.features.paste.target,
-            data: {
-               paste: id
-            }
-         } );
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,15 +112,6 @@ define( [
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      var replacePublisher = patterns.resources.replacePublisherForFeature( context, 'paste' );
-      function propagatePasteResource() {
-         context.model.dirty = false;
-         updateFlags();
-         return replacePublisher( context.resources.paste );
-      }
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
       function report( message, esOperation, response ) {
          var msg =
             message + ' (Elasticsearch <em>' + esOperation + '</em> failed with ' + response.status +')';
@@ -239,16 +126,6 @@ define( [
    function config( key, fallback ) {
       return ax.configuration.get( 'widgets.paperdart.elasticsearch.' + key, fallback );
    }
-
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-   var INTRO_TEXT =
-      '# This is a Pastebin!\n\n' +
-      '> Paste content, create a link to share it!\n\n' +
-      'Replace this text with something you would like to share. ' +
-      'Hit the _Save_ button to generate a unique URL for your paste, or to update an existing paste.\n\n' +
-      'Select your content type above to change syntax highlighting. ' +
-      'There is an automatic preview for _Markdown_ and _HTML_ content.\n';
 
    return {
       name: 'pdElasticsearchStoreActivity',

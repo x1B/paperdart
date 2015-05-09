@@ -46,6 +46,7 @@
          },
 
          "update": {
+            "description": "Allow to update paste contents.",
             "type": "object",
             "properties": {
                "onActions": {
@@ -60,6 +61,7 @@
          },
 
          "reset": {
+            "description": "Allow to reset the paste contents.",
             "type": "object",
             "properties": {
                "onActions": {
@@ -74,7 +76,7 @@
          },
 
          "flags": {
-            "description": "Flags to set/clear depending on the (absence of a) paste mime-type.",
+            "description": "Flags to set/clear depending on paste properties.",
             "type": "array",
             "default": [],
             "items": {
