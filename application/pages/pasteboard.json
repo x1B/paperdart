@@ -30,7 +30,7 @@
             }
          },
          {
-            "widget": "laxarjs/ax-developer-tools-widget",
+            "widget": "amd:laxar-developer-tools-widget",
             "features": {
                "button": {
                   "enabled": false
@@ -41,10 +41,10 @@
 
       "contentMain": [
          {
-            "widget": "laxarjs/ax-messages-widget"
+            "widget": "amd:laxar-messages-widget"
          },
          {
-            "widget": "laxarjs/ax-show-hide-widget",
+            "widget": "amd:laxar-show-hide-widget",
             "id": "editorShowHide",
             "features": {
                "animation": {
@@ -59,7 +59,7 @@
 
       "contentPreview": [
          {
-            "widget": "laxarjs/ax-show-hide-widget",
+            "widget": "amd:laxar-show-hide-widget",
             "id": "markdownPreviewShowHide",
             "features": {
                "animation": {
@@ -71,7 +71,7 @@
             }
          },
          {
-            "widget": "laxarjs/ax-show-hide-widget",
+            "widget": "amd:laxar-show-hide-widget",
             "id": "htmlPreviewShowHide",
             "features": {
                "animation": {
@@ -94,7 +94,7 @@
             }
          },
          {
-            "widget": "laxarjs/ax-command-bar-widget",
+            "widget": "amd:laxar-command-bar-widget",
             "features": {
                "buttons": [
                   {
@@ -122,7 +122,7 @@
 
       "markdownPreviewShowHide.content": [
          {
-            "widget": "laxarjs/ax-headline-widget",
+            "widget": "amd:laxar-headline-widget",
             "features": {
                "headline": {
                   "i18nHtmlText": "<em>Preview</em>",
@@ -131,7 +131,7 @@
             }
          },
          {
-            "widget": "laxarjs/ax-markdown-display-widget",
+            "widget": "amd:laxar-markdown-display-widget",
             "features": {
                "markdown": {
                   "resource": "paste",
@@ -144,7 +144,7 @@
 
       "htmlPreviewShowHide.content": [
          {
-            "widget": "laxarjs/ax-headline-widget",
+            "widget": "amd:laxar-headline-widget",
             "features": {
                "headline": {
                   "i18nHtmlText": "<em>Preview</em>",
@@ -153,7 +153,7 @@
             }
          },
          {
-            "widget": "laxarjs/ax-html-display-widget",
+            "widget": "amd:laxar-html-display-widget",
             "features": {
                "content": {
                   "resource": "paste",

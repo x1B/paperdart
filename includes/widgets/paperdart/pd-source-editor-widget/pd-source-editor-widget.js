@@ -5,7 +5,7 @@
 define( [
    'angular',
    'laxar',
-   'laxar_patterns',
+   'laxar-patterns',
    'angular-bootstrap',
    'angular-ui-codemirror'
 ], function( ng, ax, patterns ) {
