@@ -10,6 +10,11 @@
       position: relative;
    }
 
+   &.container {
+      width: 90%;
+      max-width: 1200px;
+   }
+
    .ax-footer {
       margin-top: $unitVertical;
    }

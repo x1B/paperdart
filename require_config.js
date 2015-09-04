@@ -23,7 +23,6 @@ var require = {
       'laxar-uikit/controls': 'laxar-uikit/dist/controls',
       'laxar-path-default-theme': 'laxar-uikit/dist/themes/default.theme',
 
-
       // LaxarJS Core Testing:
       jasmine: 'jasmine/lib/jasmine-core/jasmine',
       q_mock: 'q_mock/q',

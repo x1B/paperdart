@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+- [#11](https://github.com/x1B/paperdart/issues/11): ux: grow source editor with content
 - [#10](https://github.com/x1B/paperdart/issues/10): project: upgrade to laxarjs v1.1.0
 - [#9](https://github.com/x1B/paperdart/issues/9): markdown: fixed rendering with empty links
 - [#8](https://github.com/x1B/paperdart/issues/8): added simple favicon based on font-awesome
