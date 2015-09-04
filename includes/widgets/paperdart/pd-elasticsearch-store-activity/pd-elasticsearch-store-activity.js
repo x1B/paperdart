@@ -4,7 +4,7 @@
  */
 define( [
    'laxar',
-   'laxar_patterns'
+   'laxar-patterns'
 ], function( ax, patterns ) {
    'use strict';
 

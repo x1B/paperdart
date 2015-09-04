@@ -10,9 +10,9 @@ window.laxar = ( function() {
       description: 'A pastebin as an Elasticsearch plugin, built using LaxarJS',
       theme: 'default',
 
-      useEmbeddedFileListings: mode === 'RELEASE',
-      useMergedCss: mode === 'RELEASE',
-      eventBusTimeoutMs: (mode === 'RELEASE' ? 120 : 10) * 1000,
+      useMergedCss: mode === 'PRODUCTION',
+      useEmbeddedFileListings: mode === 'PRODUCTION',
+      eventBusTimeoutMs: (mode === 'PRODUCTION' ? 120 : 10) * 1000,
 
       widgets: {
          paperdart: {

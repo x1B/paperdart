@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+- [#10](https://github.com/x1B/paperdart/issues/10): project: upgrade to laxarjs v1.1.0
 - [#9](https://github.com/x1B/paperdart/issues/9): markdown: fixed rendering with empty links
 - [#8](https://github.com/x1B/paperdart/issues/8): added simple favicon based on font-awesome
 - [#7](https://github.com/x1B/paperdart/issues/7): footprint: replaced es-client with window.fetch

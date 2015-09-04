@@ -1,19 +1,21 @@
 /**
- * Copyright 2015 Michael Kurze
+ * Copyright 2015 aixigo AG
  * Released under the MIT license.
+ * http://laxarjs.org/license
  */
 require( [
-   'laxar-app-dependencies',
    'laxar',
-   'json!laxar-application/var/listing/application_resources.json',
-   'json!laxar-application/var/listing/bower_components_resources.json',
-   'json!laxar-application/var/listing/includes_resources.json'
-], function( widgetModules, ax, appResources, bowerResources, includeResources ) {
+   'laxar-application/var/flows/main/dependencies',
+   'json!laxar-application/var/flows/main/resources.json'
+], function( ax, mainDependencies, mainResources ) {
    'use strict';
+
    window.laxar.fileListings = {
-      application: appResources,
-      bower_components: bowerResources,
-      includes: includeResources
+      application: mainResources,
+      bower_components: mainResources,
+      includes: mainResources
    };
-   ax.bootstrap( widgetModules );
+
+   ax.bootstrap( mainDependencies );
+
 } );

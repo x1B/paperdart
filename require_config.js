@@ -16,6 +16,14 @@ var require = {
       jjv: 'jjv/lib/jjv',
       jjve: 'jjve/jjve',
 
+      'laxar': 'laxar/dist/laxar',
+      'laxar/laxar_testing': 'laxar/dist/laxar_testing',
+      'laxar-patterns': 'laxar-patterns/dist/laxar-patterns',
+      'laxar-uikit': 'laxar-uikit/dist/laxar-uikit',
+      'laxar-uikit/controls': 'laxar-uikit/dist/controls',
+      'laxar-path-default-theme': 'laxar-uikit/dist/themes/default.theme',
+
+
       // LaxarJS Core Testing:
       jasmine: 'jasmine/lib/jasmine-core/jasmine',
       q_mock: 'q_mock/q',
@@ -41,7 +49,6 @@ var require = {
       // App-specific, LaxarJS-related paths
       'laxar-application': '..',
       'laxar-app-dependencies': '../var/static/laxar_application_dependencies',
-
 
       // Widgets:
       'angular-bootstrap': 'angular-bootstrap/ui-bootstrap',
@@ -101,21 +108,6 @@ var require = {
       }
    },
    packages: [
-      {
-         name: 'laxar',
-         location: 'laxar',
-         main: 'laxar'
-      },
-      {
-         name: 'laxar_patterns',
-         location: 'laxar_patterns',
-         main: 'laxar_patterns'
-      },
-      {
-         name: 'laxar_uikit',
-         location: 'laxar_uikit',
-         main: 'laxar_uikit'
-      },
       {
          name: 'moment',
          location: 'moment',
