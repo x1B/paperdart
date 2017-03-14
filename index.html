@@ -4,16 +4,16 @@
    <meta charset="utf-8">
    <meta http-equiv="x-ua-compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Paperdart - paste & share</title>
-   <link rel="stylesheet" href="var/flows/main/dist/default.theme.css" type="text/css" data-ax-merged-css>
-   <link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css" type="text/css">
+   <title>Paperdard &ndash; pase &amp; share</title>
+
    <link rel="icon" href="favicon.ico" type="image/vnd.microsoft.icon">
+
+   <link data-ax-merged-css href="var/dist/app.bundle.css" rel="stylesheet" type="text/css">
 </head>
 <body>
    <div data-ax-page></div>
-   <div data-ng-view></div>
 
-   <script data-ax-application-mode="PRODUCTION" src="application/application.js"></script>
-   <script src="var/flows/main/dist/bundle.js" async></script>
+   <script src="var/dist/vendor.bundle.min.js"></script>
+   <script data-ax-application-mode="PRODUCTION" src="var/dist/app.bundle.min.js"></script>
 </body>
 </html>

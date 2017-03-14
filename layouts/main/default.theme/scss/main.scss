@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+@import "layout";
+
+.app {
+   &.container,
+   .ax-header,
+   .ax-content,
+   .ax-footer {
+      position: relative;
+   }
+
+   &.container {
+      width: 90%;
+      max-width: 1200px;
+   }
+
+   .ax-footer {
+      margin-top: $unitVertical;
+   }
+}

@@ -1,0 +1,9 @@
+{
+   "name": "paste-editor-widget",
+   "description": "Allows to edit a paste",
+
+   "integration": {
+      "technology": "vue",
+      "type": "widget"
+   }
+}

@@ -1,21 +1,22 @@
 /**
- * Copyright 2015 aixigo AG
- * Released under the MIT license.
- * http://laxarjs.org/license
+ * Copyright 2015-2017 aixigo AG
+ * Released under the MIT license
  */
-require( [
-   'laxar',
-   'laxar-application/var/flows/main/dependencies',
-   'json!laxar-application/var/flows/main/resources.json'
-], function( ax, mainDependencies, mainResources ) {
-   'use strict';
+import 'laxar/dist/polyfills';
+import vue from 'vue';
+vue.config.productionTip = false;
 
-   window.laxar.fileListings = {
-      application: mainResources,
-      bower_components: mainResources,
-      includes: mainResources
-   };
+import { bootstrap } from 'laxar';
 
-   ax.bootstrap( mainDependencies );
+import * as vueAdapter from 'laxar-vue-adapter';
+import artifacts from 'laxar-loader/artifacts?flow=main';
 
+const configuration = {
+   name: 'paperdart'
+};
+
+bootstrap( document.querySelector( '[data-ax-page]' ), {
+   widgetAdapters: [ vueAdapter ],
+   configuration,
+   artifacts
 } );

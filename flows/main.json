@@ -1,0 +1,12 @@
+{
+   "places": {
+      "blank": {
+         "patterns": [ "/" ],
+         "redirectTo": "paste"
+      },
+      "paste": {
+         "patterns": [ "/paste/:pasteId", "/paste" ],
+         "page":  "paste"
+      }
+   }
+}

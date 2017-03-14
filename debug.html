@@ -4,17 +4,17 @@
    <meta charset="utf-8">
    <meta http-equiv="x-ua-compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Paperdard &ndash; pase &amp; share</title>
+
    <link rel="icon" href="./favicon.ico" type="image/vnd.microsoft.icon">
-   <title>Paperdart - paste & share</title>
+
 </head>
 <body>
    <div data-ax-page></div>
-   <div data-ng-view></div>
 
-   <script data-ax-application-mode="DEBUG" src="application/application.js"></script>
-   <script src="require_config.js"></script>
-   <script src="bower_components/requirejs/require.js" data-main="../init.js"></script>
-
-   <link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css" type="text/css">
+   <script src="node_modules/source-map-support/browser-source-map-support.js"></script>
+   <script>sourceMapSupport.install();</script>
+   <script src="var/build/vendor.bundle.js"></script>
+   <script src="var/build/app.bundle.js"></script>
 </body>
 </html>
