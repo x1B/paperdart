@@ -2,21 +2,22 @@
  * Copyright 2015-2017 aixigo AG
  * Released under the MIT license
  */
-import 'laxar/dist/polyfills';
 import vue from 'vue';
 vue.config.productionTip = false;
 
-import { bootstrap } from 'laxar';
-
+import { create } from 'laxar';
 import * as vueAdapter from 'laxar-vue-adapter';
-import artifacts from 'laxar-loader/artifacts?flow=main';
+import artifacts from 'laxar-loader/artifacts?flow=main&theme=mdlite';
 
 const configuration = {
-   name: 'paperdart'
+   name: 'paperdart',
+   logging: { threshold: 'TRACE' },
+   theme: 'mdlite',
+   router: {
+      navigo: { useHash: true }
+   }
 };
 
-bootstrap( document.querySelector( '[data-ax-page]' ), {
-   widgetAdapters: [ vueAdapter ],
-   configuration,
-   artifacts
-} );
+create( [ vueAdapter ], artifacts, configuration )
+   .flow( 'main', document.querySelector( '[data-ax-page]' ) )
+   .bootstrap();

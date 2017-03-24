@@ -1,0 +1,21 @@
+@import "variables";
+
+.main-layout {
+   .main-ribbon {
+      background: $accentColor;
+      height: 40vh;
+      width: 100vw;
+      flex-shrink: 0;
+   }
+
+   .main-content-wrapper {
+      margin-top: -35vh;
+      flex-shrink: 0;
+   }
+
+   .main-content {
+      border-radius: 2px;
+      padding: 20px;
+      min-height: 60vh;
+   }
+}

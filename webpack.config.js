@@ -23,10 +23,11 @@ const publicPath = isProduction ? '/var/dist/' : '/var/build/';
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const config = {
+   devtool: '#source-map',
    entry: {
       'app': './init.js',
       'vendor': [
-         'laxar/dist/polyfills', 'laxar', 'laxar-vue-adapter', 'vue'
+         'laxar-vue-adapter', 'vue'
       ]
    },
 
@@ -43,10 +44,7 @@ const config = {
       modules: [
          path.resolve( './node_modules' )
       ],
-      extensions: [ '.js', '.vue' ],
-      alias: {
-         'default.theme': path.resolve( 'laxar-uikit/themes/default.theme' )
-      }
+      extensions: [ '.js', '.vue' ]
    },
 
    module: {
@@ -91,14 +89,12 @@ const config = {
                'style-loader!css-loader'
          },
          {  // load scss files by precompiling with the sass-loader
-            test: /\/default.theme\/.*\.s[ac]ss$/,
+            test: /\/mdlite.theme\/.*\.s[ac]ss$/,
             loader: 'sass-loader',
             options: {
                includePaths: [
-                  'bootstrap-sass/assets/stylesheets',
-                  'laxar-uikit/themes/default.theme/scss',
-                  'laxar-uikit/scss'
-               ].map( p => path.resolve( __dirname, 'node_modules', p ) )
+                  path.resolve( __dirname, './application/themes/mdlite.theme/scss' )
+               ]
             }
          }
       ]
@@ -131,7 +127,6 @@ module.exports = config;
 
 function productionPlugins( plugins ) {
    return plugins.concat( [
-      new webpack.SourceMapDevToolPlugin( { filename: '[name].bundle.min.js.map' } ),
       new webpack.optimize.UglifyJsPlugin( {
          compress: { warnings: false },
          sourceMap: true
@@ -143,7 +138,6 @@ function productionPlugins( plugins ) {
 function basePlugins() {
    return [
       new webpack.optimize.CommonsChunkPlugin( { name: 'vendor' } ),
-      new webpack.SourceMapDevToolPlugin( { filename: '[name].bundle.js.map' } )
    ];
 }
 
@@ -151,6 +145,5 @@ function browserSpecPlugins() {
    const WebpackJasmineHtmlRunnerPlugin = require( 'webpack-jasmine-html-runner-plugin' );
    return [
       new webpack.SourceMapDevToolPlugin( { filename: '[name].bundle.js.map' } ),
-      new WebpackJasmineHtmlRunnerPlugin()
    ];
 }

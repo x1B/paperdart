@@ -6,7 +6,7 @@
 
 <script>
 export default {
-   data:() => { counter: 0 },
+   data: () => ({ counter: 0 }),
    created() {
       console.log( 'created' );
       this.interval = setInterval(() => {

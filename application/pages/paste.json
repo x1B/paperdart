@@ -3,15 +3,13 @@
 
    "areas": {
       "activities": [
-         {
-            "widget": "pastebin-activity"
-         }
       ],
       "editor": [
          {
             "widget": "paste-editor-widget"
          }
       ],
-      "preview": []
+      "preview": [
+      ]
    }
 }
