@@ -1,0 +1,12 @@
+.idea
+atlassian-ide-plugin.xml
+*.orig
+.sass-cache
+/dist
+/build
+/var
+/node_modules
+/bower_components
+*.backup.json
+paperdart-*.zip
+npm-debug.log

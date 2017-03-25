@@ -1,51 +1,57 @@
-# Paperdart
+# binzen
 
-> A pastebin as an Elasticsearch plugin, built using LaxarJS
+> paperdart persistence
 
-## Installation
+## About
 
-Here are basic installation instructions for Mac OS X.
-Other platforms should work similarly.
+This project uses [Feathers](http://feathersjs.com). An open source web framework for building modern real-time applications.
 
+## Getting Started
 
-### Development Setup
+Getting up and running is as easy as 1, 2, 3.
 
-```sh
+1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
+2. Install your dependencies
+    
+    ```
+    cd path/to/binzen; npm install
+    ```
 
-# install elasticsearch, for example using homebrew
-brew install elasticsearch
+3. Start your app
+    
+    ```
+    npm start
+    ```
 
-# get the app
-git clone --recursive https://github.com/x1B/paperdart.git
-cd paperdart
-npm install
+## Testing
 
-# change the entry `widgets.paperdart.elasticsearch.host` to 'localhost:9200'
-vi application/application.js
+Simply run `npm test` and all your tests in the `test/` directory will be run.
 
-# for development only: allow CORS
-elasticsearch --config=./application/elasticsearch/development.yml &
+## Scaffolding
 
-# start the development frontend
-npm start
-
-```
-
-
-### Production Setup
-
-To get around CORS restrictions, it is recommended to install Paperdart as an elasticsearch plugin:
-
-```sh
-
-# make sure to adjust this to your plugins folder
-mkdir -p /usr/local/var/lib/elasticsearch/plugins/paperdart/_site
-
-# assuming that the development setup (above) has been performed successfully
-cd path/to/paperdart
-
-npm run-script optimize
-
-cp -r ./* /usr/local/var/lib/elasticsearch/plugins/paperdart/_site
+Feathers has a powerful command line interface. Here are a few things it can do:
 
 ```
+$ npm install -g feathers-cli             # Install Feathers CLI
+
+$ feathers generate service               # Generate a new Service
+$ feathers generate hook                  # Generate a new Hook
+$ feathers generate model                 # Generate a new Model
+$ feathers help                           # Show all commands
+```
+
+## Help
+
+For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
+
+## Changelog
+
+__0.1.0__
+
+- Initial release
+
+## License
+
+Copyright (c) 2016
+
+Licensed under the [MIT license](LICENSE).

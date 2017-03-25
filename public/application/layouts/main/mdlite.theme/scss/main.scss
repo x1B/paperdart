@@ -1,6 +1,12 @@
 @import "variables";
 
 .main-layout {
+   h2 {
+      .material-icons {
+         font-size: 32px;
+      }
+   }
+
    .main-ribbon {
       background: $accentColor;
       height: 40vh;
