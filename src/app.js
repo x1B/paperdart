@@ -1,49 +1,35 @@
-'use strict';
+/* eslint-env node */
 
 const path = require( 'path' );
-const serveStatic = require( 'feathers' ).static;
-const favicon = require( 'serve-favicon' );
-const compress = require( 'compression' );
+const express = require( 'express' );
+const compression = require( 'compression' );
 const cors = require( 'cors' );
-const feathers = require( 'feathers' );
-const configuration = require( 'feathers-configuration' );
-const hooks = require( 'feathers-hooks' );
-const rest = require( 'feathers-rest' );
-const bodyParser = require( 'body-parser' );
-const socketio = require( 'feathers-socketio' );
-const middleware = require( './middleware' );
-const services = require( './services' );
+const favicon = require( 'serve-favicon' );
+const serveStatic = require( 'serve-static' );
 
-const app = feathers();
 
-app.configure( configuration( path.join( __dirname , '..' ) ) ) ;
+module.exports = configuration => {
 
-const whitelist = app.get( 'corsWhitelist' );
-const corsOptions = {
-   origin( origin , callback ) {
-      const originIsWhitelisted = whitelist.indexOf( origin ) !== - 1;
-      callback( null , originIsWhitelisted ) ;
-   }
+   const { paths, corsWhitelist = [] } = configuration;
+   const { frontend: frontendPath } = paths;
+
+   const app = express();
+   const corsOptions = {
+      origin( origin, callback ) {
+         const originIsWhitelisted = corsWhitelist.indexOf( origin ) !== -1;
+         callback( null, originIsWhitelisted );
+      }
+   };
+
+   return app.use( compression() )
+      .options( '*', cors( corsOptions ) )
+      .use( cors( corsOptions ) )
+      .use( favicon( path.join( frontendPath, 'favicon.ico' ) ) )
+      .use( '/', serveStatic( frontendPath ) )
+      .get( '/paste/:paste', ( req, res ) => {
+         res.sendFile( path.join( frontendPath, 'index.html' ), {
+            root: app.get( 'public' )
+         } );
+      } );
+
 };
-
-app.use( compress() )
-   .options( '*' , cors( corsOptions ) )
-   .use( cors( corsOptions ) )
-   .use( favicon( path.join( app.get( 'public' ) , 'favicon.ico' ) ) )
-   .use( '/' , serveStatic( app.get( 'public' ) ) )
-   .get( '/view/:paste' , ( req , res ) => {
-      res.sendFile( 'index.html' , {
-         root : app.get( 'public' )
-      } )
-   } )
-   .use( bodyParser.json() )
-   .use( bodyParser.urlencoded( {
-      extended : true
-   } ) )
-   .configure( hooks() )
-   .configure( rest() )
-   .configure( socketio() )
-   .configure( services )
-   .configure( middleware ) ;
-
-module.exports = app;

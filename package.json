@@ -1,6 +1,6 @@
 {
-   "name": "binzen",
-   "description": "paperdart persistence",
+   "name": "paperdart",
+   "description": "self-hosted pastebin",
    "version": "0.0.0",
    "homepage": "",
    "main": "src/",
@@ -25,15 +25,10 @@
       "body-parser": "^1.17.1",
       "compression": "^1.6.2",
       "cors": "^2.8.1",
-      "feathers": "^2.1.1",
-      "feathers-configuration": "^0.3.3",
-      "feathers-errors": "^2.6.2",
-      "feathers-hooks": "^1.8.1",
-      "feathers-nedb": "^2.6.1",
-      "feathers-rest": "^1.7.1",
-      "feathers-socketio": "^1.5.2",
+      "express": "^4.15.2",
       "nedb": "^1.8.0",
       "serve-favicon": "^2.4.1",
+      "serve-static": "^1.12.1",
       "winston": "^2.3.1"
    },
    "devDependencies": {
