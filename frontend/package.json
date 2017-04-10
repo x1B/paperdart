@@ -1,6 +1,6 @@
 {
    "name": "paperdart",
-   "description": "A pastebin built using LaxarJS and feathers",
+   "description": "yet another pastebin",
    "version": "1.0.0-pre",
    "private": true,
    "repository": {
@@ -30,23 +30,23 @@
       "extract-text-webpack-plugin": "^2.1.0",
       "file-loader": "^0.10.1",
       "img-loader": "^2.0.0",
-      "laxar": "^2.0.0-alpha.19",
-      "laxar-loader": "git+https://github.com/laxarjs/laxar-loader.git#v2.0.0-alpha.1",
+      "laxar": "^2.0.0-alpha.22",
+      "laxar-loader": "2.0.0-alpha.2",
       "laxar-mocks": "^2.0.0-beta.3",
       "laxar-patterns": "^2.0.0-beta.0",
       "laxar-uikit": "^2.0.0-alpha.5",
-      "laxar-vue-adapter": "^2.0.0-alpha.1",
-      "node-sass": "^4.5.1",
+      "laxar-vue-adapter": "^2.0.0-beta.0",
+      "node-sass": "^4.5.2",
       "sass-loader": "^6.0.3",
-      "scss-loader": "^0.0.1",
-      "style-loader": "^0.13.2",
+      "style-loader": "^0.16.1",
       "vue": "^2.2.4",
-      "vue-loader": "^11.1.4",
-      "vue-template-compiler": "^2.2.4",
-      "webpack": "^2.3.0",
+      "vue-loader": "^11.3.4",
+      "webpack": "^2.3.3",
       "webpack-dev-server": "^2.4.2"
    },
    "dependencies": {
-      "nedb": "^1.8.0"
+      "codemirror": "^5.25.0",
+      "nedb": "^1.8.0",
+      "vue-template-compiler": "^2.2.6"
    }
 }

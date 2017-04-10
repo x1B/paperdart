@@ -1,5 +1,5 @@
 /**
- * Copyright 2015-2017 aixigo AG
+ * Copyright 2015-2017 Michael Kurze
  * Released under the MIT license
  */
 import vue from 'vue';

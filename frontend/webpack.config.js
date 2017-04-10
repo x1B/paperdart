@@ -1,12 +1,10 @@
 /**
  * Copyright 2017 Michael Kurze
  * Released under the MIT license.
- * http://laxarjs.org/license
  */
 /* eslint-env node */
 
 const path = require( 'path' );
-const webpack = require( 'webpack' );
 const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,8 +16,7 @@ module.exports = ( env = {} ) => {
    return {
       devtool: '#source-map',
       entry: {
-         'app': './init.js',
-         'vendor': [ 'laxar-vue-adapter', 'vue' ]
+         'app': './init.js'
       },
 
       output: {
@@ -28,10 +25,7 @@ module.exports = ( env = {} ) => {
          filename: env.production ? '[name].bundle.min.js' : '[name].bundle.js'
       },
 
-      plugins: [
-         new webpack.optimize.CommonsChunkPlugin( { name: 'vendor' } ),
-         ...( env.production ? [ new ExtractTextPlugin( { filename: '[name].bundle.css' } ) ] : [] )
-      ],
+      plugins: env.production ? [ new ExtractTextPlugin( { filename: '[name].bundle.css' } ) ] : [],
 
       resolve: {
          modules: [ path.resolve( __dirname, 'node_modules' ) ],

@@ -4,7 +4,6 @@ atlassian-ide-plugin.xml
 .sass-cache
 /dist
 /build
-/var
 /node_modules
 /bower_components
 *.backup.json

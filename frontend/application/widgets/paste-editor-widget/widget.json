@@ -2,6 +2,10 @@
    "name": "paste-editor-widget",
    "description": "Allows to edit a paste",
 
+   "controls": [
+      "codemirror-control"
+   ],
+
    "integration": {
       "technology": "vue",
       "type": "widget"

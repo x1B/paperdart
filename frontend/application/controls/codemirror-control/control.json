@@ -1,0 +1,6 @@
+{
+   "name": "codemirror-control",
+   "integration": {
+      "technology": "vue"
+   }
+}

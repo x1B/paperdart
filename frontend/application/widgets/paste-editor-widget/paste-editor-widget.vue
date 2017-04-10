@@ -1,20 +1,21 @@
 <template>
    <div>
-      <h1>Test {{ counter }}</h1>
+      <h5>Type: {{ paste.type }}</h5>
+      <codemirror-control :text="paste.content" />
    </div>
 </template>
 
 <script>
 export default {
-   data: () => ({ counter: 0 }),
+   data: () => ({
+      paste: {
+         content: 'Hallo',
+         type: 'text/plain'
+      }
+   }),
    created() {
-      console.log( 'created' );
-      this.interval = setInterval(() => {
-         this.counter++;
-      }, 1000);
    },
    destroyed() {
-      clearInterval(this.interval);
    }
 }
 </script>

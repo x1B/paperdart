@@ -1,4 +1,6 @@
-export const injections = [ 'axEventBus' ]
+export const injections = [ 'axEventBus' ];
 export function create( eventBus ) {
-   console.log( 'pastebin-activity' );
+   console.log( '7' );
 }
+
+console.log( 'Ho!' );
